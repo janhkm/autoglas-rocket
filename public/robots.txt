@@ -4,6 +4,8 @@ Allow: /
 Disallow: /api/
 Disallow: /termin-anfragen
 Disallow: /_next/
+Disallow: /impressum/
+Disallow: /datenschutz/
 
 # Host
 Host: https://autoglas-rocket.de

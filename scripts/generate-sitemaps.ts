@@ -123,6 +123,8 @@ ${sitemapsXml}
 function generatePagesSitemap(): SitemapUrl[] {
   const lastmod = new Date().toISOString();
   
+  // Impressum und Datenschutz werden nicht indexiert (noindex) 
+  // und sind daher nicht in der Sitemap enthalten
   return [
     {
       loc: `${BASE_URL}/`,
@@ -135,18 +137,6 @@ function generatePagesSitemap(): SitemapUrl[] {
       lastmod,
       changefreq: 'weekly',
       priority: 0.8,
-    },
-    {
-      loc: `${BASE_URL}/impressum`,
-      lastmod,
-      changefreq: 'yearly',
-      priority: 0.3,
-    },
-    {
-      loc: `${BASE_URL}/datenschutz`,
-      lastmod,
-      changefreq: 'yearly',
-      priority: 0.3,
     },
   ];
 }

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Impressum | Autoglas-Rocket',
   description: 'Impressum und Anbieterkennzeichnung von Autoglas-Rocket – Ihrer Vermittlungsplattform für professionellen Scheibenwechsel deutschlandweit.',
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
   alternates: {

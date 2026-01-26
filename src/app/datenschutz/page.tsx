@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Datenschutzerklärung | Autoglas-Rocket',
   description: 'Datenschutzerklärung von Autoglas-Rocket. Informationen zur Verarbeitung Ihrer personenbezogenen Daten und Ihren Rechten.',
   robots: {
-    index: true,
+    index: false,
     follow: true,
   },
   alternates: {
