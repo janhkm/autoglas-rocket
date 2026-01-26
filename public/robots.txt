@@ -1,0 +1,12 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /termin-anfragen
+Disallow: /_next/
+
+# Host
+Host: https://autoglas-rocket.de
+
+# Sitemaps
+Sitemap: https://autoglas-rocket.de/sitemap.xml

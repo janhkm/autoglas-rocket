@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Autoglas-Rocket
 
-## Getting Started
+**Programmatic SEO-getriebene Autoglas-Service-Plattform**
 
-First, run the development server:
+Eine skalierbare Next.js-Anwendung, die automatisch tausende lokale Landingpages generiert, um Autoglas-Suchanfragen systematisch abzudecken.
+
+## 📋 Features
+
+- **Programmatic SEO**: Automatische Generierung von 500+ indexierbaren Seiten
+- **3 Template-Typen**: 
+  - T1: Stadtseiten (`/autoglas-[stadt]/`)
+  - T2: Leistung+Stadt (`/steinschlag-reparatur-[stadt]/`)
+  - T3: Fahrzeugseiten (`/scheibenwechsel-[marke]-[modell]/`)
+- **Duplicate-Content-Vermeidung**: Synonym-Pool System für einzigartige Inhalte
+- **Schema.org Markup**: LocalBusiness, Service, FAQPage, BreadcrumbList
+- **Interne Verlinkung**: Automatische Querverweise zwischen Seiten
+- **Lead-Generierung**: Integriertes Anfrage-Formular mit Tracking
+- **Mobile-First Design**: Responsive UI mit Tailwind CSS
+
+## 🛠 Tech Stack
+
+- **Framework**: Next.js 16 (App Router, SSR/SSG)
+- **Sprache**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **SEO**: next-sitemap, Schema.org JSON-LD
+- **Testing**: Jest
+
+## 🚀 Schnellstart
 
 ```bash
+# Dependencies installieren
+npm install
+
+# Entwicklungsserver starten
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Produktion-Build erstellen
+npm run build
+
+# Produktion-Server starten
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 📁 Projektstruktur
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+autoglas-rocket/
+├── src/
+│   ├── app/                    # Next.js App Router Seiten
+│   │   ├── autoglas-[city]/    # T1: Stadtseiten
+│   │   ├── [service]-[city]/   # T2: Leistung+Stadt
+│   │   └── scheibenwechsel-[brand]-[model]/  # T3: Fahrzeuge
+│   ├── components/             # React Komponenten
+│   │   ├── ui/                 # UI-Primitives (Button, Card)
+│   │   ├── Hero.tsx
+│   │   ├── LeadForm.tsx
+│   │   ├── FAQ.tsx
+│   │   └── ...
+│   ├── data/                   # Datenbasis
+│   │   ├── cities.ts           # 50+ Städte
+│   │   ├── services.ts         # Leistungen
+│   │   └── vehicles.ts         # 100+ Fahrzeugmodelle
+│   └── lib/                    # Utilities
+│       ├── content-generator.ts # Synonym-Pool & Content
+│       ├── schema.ts           # Schema.org Generierung
+│       └── internal-links.ts   # Verlinkung
+├── scripts/                    # SEO-Scripts
+│   ├── seo-audit.ts            # PRD-Compliance Check
+│   └── generate-sitemap-data.ts
+├── tests/                      # Jest Tests
+│   └── seo.test.ts
+└── next-sitemap.config.js      # Sitemap-Konfiguration
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧪 Testing & SEO-Audit
 
-## Learn More
+```bash
+# Unit Tests ausführen
+npm test
 
-To learn more about Next.js, take a look at the following resources:
+# SEO-Audit (PRD-Compliance)
+npm run seo:audit
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Sitemap-Daten generieren
+npm run seo:sitemap
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📊 SEO-Metriken (PRD-Ziele)
 
-## Deploy on Vercel
+| KPI | Ziel | Status |
+|-----|------|--------|
+| Indexierte Seiten | >500 | ✅ |
+| URL-Pattern Konformität | 100% | ✅ |
+| Duplicate Content | 0% | ✅ |
+| Schema.org Markup | Vollständig | ✅ |
+| Core Web Vitals | Grün | ⏳ |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🔧 Konfiguration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Umgebungsvariablen
+
+```env
+# .env.local
+SITE_URL=https://autoglas-rocket.de
+```
+
+### Neue Stadt hinzufügen
+
+Bearbeite `src/data/cities.ts`:
+
+```typescript
+{
+  slug: "neue-stadt",
+  name: "Neue Stadt",
+  region: "Region",
+  bundesland: "Bundesland",
+  population: 100000,
+  plz: ["12345"],
+  nearby: ["nachbar-stadt"],
+  coordinates: { lat: 50.0, lng: 8.0 }
+}
+```
+
+### Neues Fahrzeugmodell hinzufügen
+
+Bearbeite `src/data/vehicles.ts`:
+
+```typescript
+{
+  slug: "neues-modell",
+  name: "Neues Modell",
+  brandSlug: "marke",
+  years: "2020-2024",
+  popular: true
+}
+```
+
+## 📝 Lizenz
+
+Proprietär - Alle Rechte vorbehalten.
+
+## 👥 Kontakt
+
+- Website: [autoglas-rocket.de](https://autoglas-rocket.de)
+- E-Mail: info@autoglas-rocket.de
+- Telefon: 0800 123 4567
