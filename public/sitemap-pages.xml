@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://autoglas-rocket.de/</loc>
+    <lastmod>2026-01-26T14:08:23.826Z</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://autoglas-rocket.de/einsatzgebiete</loc>
+    <lastmod>2026-01-26T14:08:23.826Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://autoglas-rocket.de/impressum</loc>
+    <lastmod>2026-01-26T14:08:23.826Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://autoglas-rocket.de/datenschutz</loc>
+    <lastmod>2026-01-26T14:08:23.826Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+</urlset>

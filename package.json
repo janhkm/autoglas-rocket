@@ -9,9 +9,10 @@
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "seo:audit": "npx ts-node scripts/seo-audit.ts",
-    "seo:sitemap": "npx ts-node scripts/generate-sitemap-data.ts",
-    "postbuild": "next-sitemap"
+    "seo:audit": "npx ts-node --project tsconfig.scripts.json scripts/seo-audit.ts",
+    "seo:sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
+    "sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
+    "postbuild": "npm run sitemap"
   },
   "dependencies": {
     "next": "16.1.4",

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { DM_Sans, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { generateOrganizationSchema, schemaToJsonLd } from '@/lib/schema';
+import CookieBanner from '@/components/CookieBanner';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -113,6 +114,7 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased bg-white text-slate-900">
         {children}
+        <CookieBanner />
       </body>
     </html>
   );

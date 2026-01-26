@@ -120,14 +120,11 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500">
             <p>© {new Date().getFullYear()} Autoglas-Rocket. Alle Rechte vorbehalten.</p>
             <div className="flex gap-6">
-              <Link href="/impressum" className="hover:text-orange-400 transition-colors">
+              <Link href="/impressum/" className="hover:text-orange-400 transition-colors">
                 Impressum
               </Link>
-              <Link href="/datenschutz" className="hover:text-orange-400 transition-colors">
+              <Link href="/datenschutz/" className="hover:text-orange-400 transition-colors">
                 Datenschutz
-              </Link>
-              <Link href="/agb" className="hover:text-orange-400 transition-colors">
-                AGB
               </Link>
             </div>
           </div>
