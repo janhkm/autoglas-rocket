@@ -71,12 +71,12 @@ export const services: Service[] = [
   }
 ];
 
-// Hauptservice für Landingpages
+// Hauptservice für Landingpages (generates Service-Location pages)
 export const mainServices = services.filter(s => 
-  ["scheibenwechsel"].includes(s.slug)
+  ["scheibenwechsel", "frontscheibe-wechseln", "heckscheibe-wechseln"].includes(s.slug)
 );
 
-// Alle Scheibenwechsel-Services (für Detailseiten)
+// Alle Scheibenwechsel-Services (für Detailseiten und Hub-Seite)
 export const allGlassServices = services;
 
 export function getServiceBySlug(slug: string): Service | undefined {

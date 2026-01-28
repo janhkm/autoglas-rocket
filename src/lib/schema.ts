@@ -1,6 +1,9 @@
 /**
  * Schema.org Markup Generator
- * Generiert strukturierte Daten für AutoRepair, Service, FAQ, HowTo, AggregateRating, WebSite, Review
+ * Generiert strukturierte Daten für AutoRepair, Service, FAQ, HowTo, WebSite
+ * 
+ * Note: AggregateRating and Review removed to comply with Google guidelines
+ * (fabricated reviews are not allowed in structured data)
  */
 
 import { Location, getLocationHierarchy } from '@/data/locations';
@@ -14,6 +17,21 @@ const BUSINESS_EMAIL = 'info@autoglas-rocket.de';
 const BUSINESS_LOGO = `${BUSINESS_URL}/autoglas-rocket-logo.png`;
 const BUSINESS_IMAGE = `${BUSINESS_URL}/autoglas-rocket-logo.png`;
 const BUSINESS_DESCRIPTION = 'Professioneller mobiler Scheibenwechsel-Service für Front- und Heckscheiben. Deutschlandweit mit direkter Versicherungsabwicklung.';
+
+// Social Media Profiles for E-E-A-T signals
+const BUSINESS_SOCIAL_PROFILES: string[] = [
+  // Add actual profiles when available
+  // 'https://www.facebook.com/autoglasrocket',
+  // 'https://www.instagram.com/autoglasrocket',
+  // 'https://www.linkedin.com/company/autoglas-rocket',
+];
+
+// Publication date for Article schema (site launch date)
+const SITE_LAUNCH_DATE = '2024-01-15';
+
+// Build date for dateModified - use env var or fall back to fixed date
+// This ensures consistent dateModified across builds, not render time
+const BUILD_DATE = process.env.BUILD_DATE || '2026-01-28';
 
 export interface AutoRepairSchema {
   '@context': 'https://schema.org';
@@ -52,8 +70,6 @@ export interface AutoRepairSchema {
     closes: string;
   }[];
   sameAs: string[];
-  aggregateRating?: AggregateRatingSchema;
-  review?: ReviewSchema[];
 }
 
 // WebSite Schema für Sitelinks-Searchbox
@@ -70,22 +86,6 @@ export interface WebSiteSchema {
   inLanguage: string;
 }
 
-// Review Schema für einzelne Bewertungen
-export interface ReviewSchema {
-  '@type': 'Review';
-  reviewRating: {
-    '@type': 'Rating';
-    ratingValue: string;
-    bestRating: string;
-    worstRating: string;
-  };
-  author: {
-    '@type': 'Person';
-    name: string;
-  };
-  datePublished: string;
-  reviewBody: string;
-}
 
 export interface ServiceSchema {
   '@context': 'https://schema.org';
@@ -138,13 +138,6 @@ export interface BreadcrumbSchema {
   }[];
 }
 
-export interface AggregateRatingSchema {
-  '@type': 'AggregateRating';
-  ratingValue: string;
-  reviewCount: string;
-  bestRating: string;
-  worstRating: string;
-}
 
 export interface HowToSchema {
   '@context': 'https://schema.org';
@@ -223,92 +216,12 @@ function getRegionForLocation(location: Location): string {
   return bundesland?.name || 'Deutschland';
 }
 
-/**
- * Generiert pseudo-zufällige aber konsistente Bewertungsdaten basierend auf dem Slug
- */
-function generateRatingForLocation(slug: string): { rating: string; count: string } {
-  // Seed-basierte "Zufallszahlen" für konsistente Ergebnisse
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = ((hash << 5) - hash) + slug.charCodeAt(i);
-    hash = hash & hash;
-  }
-  
-  // Rating zwischen 4.6 und 4.9
-  const rating = (4.6 + (Math.abs(hash % 4) * 0.1)).toFixed(1);
-  // Anzahl Bewertungen zwischen 47 und 234
-  const count = String(47 + Math.abs(hash % 188));
-  
-  return { rating, count };
-}
 
-// Review-Vorlagen für realistische Bewertungen
-const reviewTemplates = [
-  { name: 'Michael S.', body: 'Sehr schneller und professioneller Service. Die Monteure waren pünktlich und haben sauber gearbeitet. Kann ich nur empfehlen!' },
-  { name: 'Sandra K.', body: 'Unkomplizierte Abwicklung mit der Versicherung. Scheibenwechsel hat keine 2 Stunden gedauert. Top!' },
-  { name: 'Thomas M.', body: 'Der mobile Service ist wirklich praktisch. Kein Werkstattbesuch nötig, alles wurde bei mir auf der Arbeit erledigt.' },
-  { name: 'Julia B.', body: 'Faire Preise und freundliche Mitarbeiter. Die neue Scheibe sitzt perfekt. Gerne wieder!' },
-  { name: 'Andreas W.', body: 'Nach einem Steinschlag auf der Autobahn schnell geholfen. Termin innerhalb von 2 Tagen. Sehr zufrieden.' },
-  { name: 'Christina H.', body: 'Alles super geklappt. Von der Terminvereinbarung bis zur fertigen Scheibe - rundum professionell.' },
-  { name: 'Markus L.', body: 'Endlich ein Autoglas-Service der hält was er verspricht. Mobil, schnell und sauber. Danke!' },
-  { name: 'Petra R.', body: 'Die Versicherungsabwicklung wurde komplett übernommen. Ich musste mich um nichts kümmern. Prima!' },
-];
-
-/**
- * Generiert pseudo-zufällige Reviews basierend auf dem Slug
- */
-function generateReviewsForLocation(slug: string, count: number = 3): ReviewSchema[] {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) {
-    hash = ((hash << 5) - hash) + slug.charCodeAt(i);
-    hash = hash & hash;
-  }
-  
-  const reviews: ReviewSchema[] = [];
-  const usedIndices = new Set<number>();
-  
-  for (let i = 0; i < count; i++) {
-    // Wähle einen einzigartigen Review aus
-    let index = Math.abs((hash + i * 7) % reviewTemplates.length);
-    while (usedIndices.has(index)) {
-      index = (index + 1) % reviewTemplates.length;
-    }
-    usedIndices.add(index);
-    
-    const template = reviewTemplates[index];
-    const rating = (4.5 + (Math.abs((hash + i) % 6) * 0.1)).toFixed(1);
-    
-    // Generiere ein Datum in den letzten 6 Monaten
-    const daysAgo = Math.abs((hash + i * 13) % 180);
-    const reviewDate = new Date();
-    reviewDate.setDate(reviewDate.getDate() - daysAgo);
-    
-    reviews.push({
-      '@type': 'Review',
-      reviewRating: {
-        '@type': 'Rating',
-        ratingValue: rating,
-        bestRating: '5',
-        worstRating: '1'
-      },
-      author: {
-        '@type': 'Person',
-        name: template.name
-      },
-      datePublished: reviewDate.toISOString().split('T')[0],
-      reviewBody: template.body
-    });
-  }
-  
-  return reviews;
-}
 
 // AutoRepair Schema für Standortseiten (spezifischer als LocalBusiness)
 export function generateAutoRepairSchema(location: Location): AutoRepairSchema {
   const region = getRegionForLocation(location);
   const areaType = getSchemaAreaType(location);
-  const { rating, count } = generateRatingForLocation(location.slug);
-  const reviews = generateReviewsForLocation(location.slug, 3);
   
   return {
     '@context': 'https://schema.org',
@@ -338,14 +251,6 @@ export function generateAutoRepairSchema(location: Location): AutoRepairSchema {
         longitude: location.coordinates.lng
       }
     }),
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: rating,
-      reviewCount: count,
-      bestRating: '5',
-      worstRating: '1'
-    },
-    review: reviews,
     areaServed: [
       {
         '@type': areaType,
@@ -370,7 +275,7 @@ export function generateAutoRepairSchema(location: Location): AutoRepairSchema {
         closes: '14:00'
       }
     ],
-    sameAs: []
+    sameAs: BUSINESS_SOCIAL_PROFILES
   };
 }
 
@@ -562,7 +467,7 @@ export function generateOrganizationSchema(): OrganizationSchema {
       areaServed: 'DE',
       availableLanguage: 'German'
     },
-    sameAs: []
+    sameAs: BUSINESS_SOCIAL_PROFILES
   };
 }
 
@@ -584,9 +489,6 @@ export function generateWebSiteSchema(): WebSiteSchema {
 
 // Hauptunternehmen-Schema für die Startseite (AutoRepair ohne spezifischen Standort)
 export function generateMainBusinessSchema(): object {
-  const { rating, count } = generateRatingForLocation('main-business');
-  const reviews = generateReviewsForLocation('main-business', 5);
-  
   return {
     '@context': 'https://schema.org',
     '@type': 'AutoRepair',
@@ -609,14 +511,6 @@ export function generateMainBusinessSchema(): object {
       '@type': 'Country',
       name: 'Deutschland'
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: rating,
-      reviewCount: count,
-      bestRating: '5',
-      worstRating: '1'
-    },
-    review: reviews,
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',
@@ -631,7 +525,7 @@ export function generateMainBusinessSchema(): object {
         closes: '14:00'
       }
     ],
-    sameAs: []
+    sameAs: BUSINESS_SOCIAL_PROFILES
   };
 }
 
@@ -656,6 +550,76 @@ export function generateDetailedServiceSchema(
       ...(offer.areaServed && { areaServed: offer.areaServed })
     }
   };
+}
+
+// Article Schema for E-E-A-T signals
+export interface ArticleSchema {
+  '@context': 'https://schema.org';
+  '@type': 'Article';
+  headline: string;
+  description: string;
+  author: {
+    '@type': 'Organization';
+    name: string;
+    url: string;
+  };
+  publisher: {
+    '@type': 'Organization';
+    name: string;
+    logo: {
+      '@type': 'ImageObject';
+      url: string;
+    };
+  };
+  datePublished: string;
+  dateModified: string;
+  mainEntityOfPage: {
+    '@type': 'WebPage';
+    '@id': string;
+  };
+}
+
+export function generateArticleSchema(
+  headline: string,
+  description: string,
+  pageUrl: string,
+  dateModified?: string
+): ArticleSchema {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    author: {
+      '@type': 'Organization',
+      name: BUSINESS_NAME,
+      url: BUSINESS_URL
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: BUSINESS_NAME,
+      logo: {
+        '@type': 'ImageObject',
+        url: BUSINESS_LOGO
+      }
+    },
+    datePublished: SITE_LAUNCH_DATE,
+    // Use provided dateModified, or fall back to BUILD_DATE (not current date)
+    // This ensures consistent timestamps across all pages during a build
+    dateModified: dateModified || BUILD_DATE,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': pageUrl
+    }
+  };
+}
+
+/**
+ * Get the build date for use in schemas
+ * Exported for use by other modules that need consistent dating
+ */
+export function getBuildDate(): string {
+  return BUILD_DATE;
 }
 
 // JSON-LD Script Tag generieren

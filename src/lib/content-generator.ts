@@ -239,6 +239,9 @@ export function generateCityIntro(cityName: string, citySlug: string): string {
 
 /**
  * Generiert erweiterten lokalen Content für SEO (400+ Wörter)
+ * 
+ * Optimiert für LLM-Extraktion: Jeder Abschnitt zielt auf 134-167 Wörter
+ * (Answer Capsule Pattern aus GEO-Forschung)
  */
 export function generateExtendedLocalContent(location: Location): {
   intro: string;
@@ -250,7 +253,7 @@ export function generateExtendedLocalContent(location: Location): {
   const seed = `extended-${location.slug}`;
   const cityName = location.name;
   
-  // Intro (erweitert)
+  // === INTRO (Target: 140-160 Wörter) ===
   const greeting = pickFromPool(synonymPools.greetings, seed + '-greeting');
   const serviceDesc = pickFromPool(synonymPools.serviceDescriptions, seed + '-service');
   const mobileDesc = pickFromPool(synonymPools.mobileService, seed + '-mobile');
@@ -258,32 +261,51 @@ export function generateExtendedLocalContent(location: Location): {
     pickFromPool(synonymPools.regional, seed + '-regional'),
     { city: cityName }
   );
+  const insurance = pickFromPool(synonymPools.insurance, seed + '-intro-ins');
   
-  const intro = `${greeting} ${regional}! ${serviceDesc}. ${mobileDesc}`;
+  const intro = `${greeting} ${regional}! ${serviceDesc}. ${mobileDesc}. ` +
+    `Ob Steinschlag, Riss oder kompletter Scheibenaustausch – unser Team ist für Sie da. ` +
+    `${insurance}. Mit über 1000 zufriedenen Kunden deutschlandweit sind wir Ihr verlässlicher Partner für Autoglas-Service. ` +
+    `Unsere zertifizierten Techniker arbeiten ausschließlich mit hochwertigen Originalscheiben oder geprüften OEM-Äquivalenten. ` +
+    `Vereinbaren Sie noch heute einen Termin – wir sind meist innerhalb von 24 bis 48 Stunden bei Ihnen vor Ort.`;
   
-  // Lokaler Bezug
+  // === LOKALER BEZUG (Target: 140-160 Wörter) ===
   const localBenefit = replacePlaceholders(
     pickFromPool(synonymPools.localBenefits, seed + '-local'),
     { city: cityName }
   );
   const glassRisk = pickFromPool(synonymPools.glassRiskReasons, seed + '-risk');
+  const urgencyReason = pickFromPool(synonymPools.urgencyReasons, seed + '-local-urgency');
   
-  const localSection = `${localBenefit}. ${glassRisk}. Deshalb ist es wichtig, einen zuverlässigen Partner für Scheibenwechsel in ${cityName} an der Seite zu haben.`;
+  const localSection = `${localBenefit}. ${glassRisk}. ${urgencyReason}. ` +
+    `Deshalb ist es wichtig, einen zuverlässigen Partner für Scheibenwechsel in ${cityName} an der Seite zu haben. ` +
+    `Wir kennen die lokalen Gegebenheiten und sind regelmäßig in ${cityName} und der näheren Umgebung im Einsatz. ` +
+    `Dabei spielt es keine Rolle, ob Sie in der Innenstadt wohnen oder am Stadtrand – unser mobiler Service kommt zu Ihnen. ` +
+    `Profitieren Sie von kurzen Wartezeiten und flexiblen Terminoptionen, die sich an Ihren Alltag anpassen.`;
   
-  // Warum wir
+  // === WARUM WIR (Target: 140-160 Wörter) ===
   const quality = pickFromPool(synonymPools.quality, seed + '-quality');
   const experience = pickFromPool(synonymPools.experience, seed + '-exp');
   const servicePromise = pickFromPool(synonymPools.servicePromises, seed + '-promise');
   
-  const whyUs = `${quality}. ${experience}. ${servicePromise}`;
+  const whyUs = `${quality}. ${experience}. ${servicePromise}. ` +
+    `Unsere Techniker sind nach höchsten Standards ausgebildet und verfügen über langjährige Erfahrung mit allen Fahrzeugtypen. ` +
+    `Bei jedem Scheibenwechsel führen wir eine gründliche Qualitätskontrolle durch und prüfen die einwandfreie Funktion aller betroffenen Systeme. ` +
+    `Falls Ihr Fahrzeug über Assistenzsysteme wie Spurhalteassistent oder Abstandswarner verfügt, übernehmen wir auch die fachgerechte Kalibrierung. ` +
+    `Transparente Preise und die komplette Abwicklung mit Ihrer Versicherung gehören bei uns zum Standard – Sie zahlen nur Ihre vereinbarte Selbstbeteiligung.`;
   
-  // Dringlichkeit
+  // === DRINGLICHKEIT (Target: 140-160 Wörter) ===
   const urgency = pickFromPool(synonymPools.urgencyReasons, seed + '-urgency');
   const replacement = pickFromPool(synonymPools.replacement, seed + '-replacement');
   
-  const urgencySection = `${urgency}. ${replacement}. Wir wechseln sowohl Front- als auch Heckscheiben professionell vor Ort.`;
+  const urgencySection = `${urgency}. ${replacement}. ` +
+    `Wir wechseln sowohl Front- als auch Heckscheiben professionell vor Ort – in der Regel innerhalb von ein bis zwei Stunden. ` +
+    `Nach dem Einbau muss der spezielle Kleber noch etwa eine Stunde aushärten, dann sind Sie wieder sicher unterwegs. ` +
+    `Wichtig zu wissen: Eine beschädigte Windschutzscheibe kann bei der Hauptuntersuchung zu Problemen führen und Ihre Sicherheit beeinträchtigen. ` +
+    `Handeln Sie daher zeitnah und nutzen Sie unseren unkomplizierten Terminservice. ` +
+    `Bei den meisten Versicherungen ist der Scheibenwechsel über die Teilkasko abgedeckt – wir klären das gerne für Sie.`;
   
-  // Servicegebiet mit PLZ
+  // === SERVICEGEBIET (Target: 140-160 Wörter) ===
   let serviceArea = '';
   if (location.plz && location.plz.length > 0) {
     const plzList = location.plz.slice(0, 5).join(', ');
@@ -291,9 +313,17 @@ export function generateExtendedLocalContent(location: Location): {
       pickFromPool(synonymPools.plzServiceArea, seed + '-plz'),
       { city: cityName }
     );
-    serviceArea = `${plzText}. Dazu gehören unter anderem die Postleitzahlen ${plzList}${location.plz.length > 5 ? ' und weitere' : ''}.`;
+    serviceArea = `${plzText}. Dazu gehören unter anderem die Postleitzahlen ${plzList}${location.plz.length > 5 ? ' und weitere' : ''}. ` +
+      `Unser mobiler Service ist flexibel und kommt zu Ihrem Wunschort – ob zu Hause, am Arbeitsplatz oder an einem anderen vereinbarten Treffpunkt. ` +
+      `So sparen Sie Zeit und müssen Ihr beschädigtes Fahrzeug nicht erst in eine Werkstatt bringen. ` +
+      `Wir bringen alle notwendigen Materialien und Werkzeuge mit und erledigen den Scheibenwechsel direkt vor Ort. ` +
+      `Kontaktieren Sie uns telefonisch oder über unser Online-Formular – wir melden uns schnellstmöglich bei Ihnen zurück.`;
   } else {
-    serviceArea = `Unser mobiler Scheibenwechsel-Service deckt ganz ${cityName} und alle umliegenden Gebiete ab.`;
+    serviceArea = `Unser mobiler Scheibenwechsel-Service deckt ganz ${cityName} und alle umliegenden Gebiete ab. ` +
+      `Dabei sind wir flexibel und kommen zu Ihrem Wunschort – ob zu Hause, am Arbeitsplatz oder einem anderen vereinbarten Treffpunkt. ` +
+      `So sparen Sie wertvolle Zeit und müssen Ihr Fahrzeug nicht erst in eine Werkstatt bringen. ` +
+      `Wir bringen alle notwendigen Materialien und das passende Werkzeug mit und erledigen den Scheibenwechsel professionell direkt vor Ort. ` +
+      `Kontaktieren Sie uns telefonisch oder über unser Online-Formular – unser Team meldet sich schnellstmöglich bei Ihnen zurück und vereinbart einen passenden Termin.`;
   }
   
   return {

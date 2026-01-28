@@ -41,7 +41,7 @@ export default function CookieBanner() {
               Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb 
               der Website erforderlich sind. Es werden keine Tracking- oder Marketing-Cookies eingesetzt.{' '}
               <Link 
-                href="/datenschutz/" 
+                href="/datenschutz" 
                 className="text-orange-500 hover:text-orange-600 underline"
               >
                 Mehr erfahren
@@ -50,7 +50,7 @@ export default function CookieBanner() {
           </div>
           <div className="flex gap-3 shrink-0">
             <Link
-              href="/datenschutz/"
+              href="/datenschutz"
               className="px-4 py-2 text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors"
             >
               Datenschutz

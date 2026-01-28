@@ -1,0 +1,40 @@
+# Autoglas-Rocket - Mobiler Scheibenwechsel
+
+> Deutschlandweiter mobiler Scheibenwechsel-Service für Front- und Heckscheiben mit direkter Versicherungsabwicklung.
+
+## Categories
+
+- [Bundesländer](/autoglas-bayern/): Autoglas-Service in allen 16 Bundesländern
+- [Großstädte](/autoglas-berlin/): 100+ Städte und deren Stadtteile
+- [Fahrzeuge](/scheibenwechsel-vw-golf/): Scheibenwechsel für alle gängigen Marken und Modelle
+
+## Page Types
+
+- **Location pages** (`/autoglas-[ort]/`): Lokaler Scheibenwechsel-Service mit FAQs, Prozessschritten, Versicherungsinfos, Servicegebiet
+- **Service-Location pages** (`/scheibenwechsel-[ort]/`): Spezifischer Scheibenwechsel-Service für Städte
+- **Vehicle pages** (`/scheibenwechsel-[marke]-[modell]/`): Fahrzeugspezifischer Scheibenwechsel mit technischen Details
+
+## Key Information
+
+- **Service**: Mobiler Scheibenwechsel (Front- und Heckscheibe)
+- **Gebiet**: Deutschlandweit
+- **Versicherung**: Direkte Abrechnung mit Teilkasko (nur Selbstbeteiligung)
+- **Dauer**: 1-2 Stunden vor Ort
+- **Termin**: Innerhalb von 24-48 Stunden möglich
+
+## Data & Freshness
+
+- Data source: Eigene Datenbank mit 6000+ Standorten
+- Update frequency: Wöchentlich
+- Coverage: Alle Bundesländer, Großstädte, Stadtteile
+
+## Full Index
+
+- [/llms-full.txt](/llms-full.txt): Vollständige Seitenübersicht mit Beschreibungen
+- [/sitemap.xml](/sitemap.xml): XML Sitemap für alle Seiten
+
+## Contact
+
+- Website: https://autoglas-rocket.de
+- Telefon: +49-174-6768392
+- E-Mail: info@autoglas-rocket.de

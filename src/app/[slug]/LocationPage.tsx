@@ -21,6 +21,7 @@ import {
   generateBreadcrumbSchema,
   generateHowToSchema,
   generateDetailedServiceSchema,
+  generateArticleSchema,
   schemaToJsonLd 
 } from '@/lib/schema';
 import { 
@@ -29,7 +30,8 @@ import {
   getServiceLinksForLocation,
   getVariedServiceLinks,
   generateBreadcrumbs,
-  getDistrictLinks
+  getDistrictLinks,
+  getPopularVehicleLinks
 } from '@/lib/internal-links';
 
 import Header from '@/components/Header';
@@ -41,6 +43,7 @@ import ProcessSteps from '@/components/ProcessSteps';
 import InsuranceInfo from '@/components/InsuranceInfo';
 import FAQ from '@/components/FAQ';
 import NearbyLinks from '@/components/NearbyLinks';
+import ArticleMeta from '@/components/ArticleMeta';
 import Link from 'next/link';
 
 interface LocationPageProps {
@@ -66,9 +69,10 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
   
   // Get internal links (mit Variation)
   const siblingLinks = getSiblingLocationLinks(locationSlug, 5);
-  const childLinks = getChildLocationLinks(locationSlug, 8);
+  const childLinks = getChildLocationLinks(locationSlug, 16);
   const serviceLinks = getServiceLinksForLocation(locationSlug);
   const variedServiceLinks = getVariedServiceLinks(locationSlug);
+  const vehicleLinks = getPopularVehicleLinks(8);
   const breadcrumbItems = generateBreadcrumbs('location', { locationSlug });
 
   // Generate all schemas
@@ -77,25 +81,40 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems);
   const howToSchema = generateHowToSchema(location);
   
+  // Article Schema for E-E-A-T
+  const pageUrl = `https://autoglas-rocket.de/autoglas-${locationSlug}/`;
+  const articleSchema = generateArticleSchema(
+    `Autoglas-Service in ${location.name}`,
+    `Professioneller mobiler Autoglas-Service in ${location.name}. Scheibenwechsel, Glasreparatur und mehr.`,
+    pageUrl
+  );
+  
   // Service Schemas für die Hauptleistungen
   const serviceSchemas = mainServices.slice(0, 2).map(service => 
     generateDetailedServiceSchema(service, location)
   );
 
   // Dynamic H1 based on location type
+  // Focused on "Autoglas" to differentiate from Service-Location pages (which target "Scheibenwechsel")
+  // Uses location.h1 override if set
   const getH1 = () => {
+    // Use custom H1 if provided
+    if (location.h1) return location.h1;
+    
     switch (location.type) {
       case 'bundesland':
-        return `Scheibenwechsel ${location.name}: Front- & Heckscheibe wechseln`;
+        return `Autoglas-Service in ${location.name} – Mobil & Professionell`;
+      case 'regierungsbezirk':
+        return `Autoglas ${location.name} – Ihr Partner für Glasreparatur`;
       case 'kreisfreie-stadt':
-        return `Scheibenwechsel ${location.name} – Professioneller Mobiler Service`;
+        return `Autoglas ${location.name} – Mobiler Service & Glasreparatur`;
       case 'stadtbezirk':
       case 'stadtteil': {
         const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-        return `Scheibenwechsel ${location.name}${parentCity ? ` in ${parentCity.name}` : ''} – Mobiler Service`;
+        return `Autoglas-Service ${location.name}${parentCity ? ` in ${parentCity.name}` : ''} – Mobil vor Ort`;
       }
       default:
-        return `Scheibenwechsel in ${location.name}`;
+        return `Autoglas-Service in ${location.name}`;
     }
   };
 
@@ -103,22 +122,19 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
   const getSubtitle = () => {
     switch (location.type) {
       case 'bundesland':
-        return `Professioneller mobiler Scheibenwechsel in ganz ${location.name}. Front- und Heckscheibe wechseln – wir kommen zu Ihnen.`;
+        return `Professioneller mobiler Autoglas-Service in ganz ${location.name}. Front- und Heckscheibe wechseln – wir kommen zu Ihnen.`;
       case 'regierungsbezirk':
-        return `Ihr Partner für Scheibenwechsel in ${location.name}. Mobiler Service für Front- und Heckscheibe.`;
+        return `Ihr Partner für Autoglas-Service in ${location.name}. Mobiler Service für Front- und Heckscheibe.`;
       case 'kreisfreie-stadt':
-        return `Professioneller mobiler Scheibenwechsel für Front- und Heckscheibe in ${location.name}.`;
+        return `Professioneller mobiler Autoglas-Service für Front- und Heckscheibe in ${location.name}. Schnell, zuverlässig, vor Ort.`;
       case 'stadtbezirk':
       case 'stadtteil':
         const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-        return `Scheibenwechsel in ${location.name}${parentCity ? ` (${parentCity.name})` : ''}. Wir kommen direkt zu Ihnen.`;
+        return `Autoglas-Service in ${location.name}${parentCity ? ` (${parentCity.name})` : ''}. Wir kommen direkt zu Ihnen – mobil und professionell.`;
       default:
-        return `Mobiler Scheibenwechsel in ${location.name} und Umgebung.`;
+        return `Mobiler Autoglas-Service in ${location.name} und Umgebung.`;
     }
   };
-
-  // Rating aus dem Schema für die Anzeige
-  const rating = localBusinessSchema.aggregateRating;
 
   return (
     <>
@@ -146,6 +162,10 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
           dangerouslySetInnerHTML={{ __html: schemaToJsonLd(schema) }}
         />
       ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: schemaToJsonLd(articleSchema) }}
+      />
 
       <Header />
       <Breadcrumbs items={breadcrumbItems} />
@@ -162,35 +182,19 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
         <section className="py-16 md:py-24">
           <div className="container mx-auto px-4">
             <div className="max-w-4xl mx-auto">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="inline-block px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
-                  {typeLabel}
-                </div>
-                
-                {/* Bewertungen anzeigen */}
-                {rating && (
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <div className="flex items-center">
-                      {[...Array(5)].map((_, i) => (
-                        <svg
-                          key={i}
-                          className={`w-4 h-4 ${i < Math.floor(parseFloat(rating.ratingValue)) ? 'text-yellow-400' : 'text-slate-300'}`}
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
-                    <span className="font-semibold">{rating.ratingValue}</span>
-                    <span className="text-slate-400">({rating.reviewCount} Bewertungen)</span>
-                  </div>
-                )}
+              <div className="inline-block px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-medium mb-6">
+                {typeLabel}
               </div>
+              
+              {/* E-E-A-T Signals */}
+              <ArticleMeta 
+                author="Autoglas-Rocket Redaktion" 
+                lastUpdated={location.lastModified}
+              />
               
               {/* H2 für semantische Struktur */}
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
-                Ihr zuverlässiger Partner für Scheibenwechsel in {location.name}
+                Ihr zuverlässiger Partner für Autoglas-Service in {location.name}
               </h2>
               
               <p className="text-xl text-slate-600 leading-relaxed mb-6">
@@ -320,7 +324,33 @@ export default function LocationPage({ locationSlug }: LocationPageProps) {
         <InsuranceInfo insuranceText={insuranceText} />
 
         {/* FAQ - Erweitert */}
-        <FAQ faqs={allFaqs} title={`Häufige Fragen zum Scheibenwechsel in ${location.name}`} />
+        <FAQ faqs={allFaqs} title={`Häufige Fragen zum Autoglas-Service in ${location.name}`} />
+
+        {/* Vehicle Links - Cross-Linking */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h3 className="text-xl font-bold text-slate-900 mb-4">
+                Scheibenwechsel für beliebte Fahrzeuge in {location.name}
+              </h3>
+              <p className="text-slate-600 mb-6">
+                Unser mobiler Autoglas-Service in {location.name} ist für alle Fahrzeugmarken und -modelle verfügbar:
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {vehicleLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    href={link.href}
+                    title={link.title}
+                    className="px-4 py-2 bg-slate-100 hover:bg-orange-100 rounded-lg text-slate-700 hover:text-orange-600 transition-colors text-sm"
+                  >
+                    {link.text}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Sibling Locations (Nachbargebiete) */}
         {siblingLinks.length > 0 && (

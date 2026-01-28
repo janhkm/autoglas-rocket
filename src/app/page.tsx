@@ -281,7 +281,7 @@ export default function HomePage() {
               Mobiler Service direkt bei Ihnen vor Ort.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/autoglas-berlin/">
+              <Link href="/einsatzgebiete/">
                 <Button size="lg" variant="secondary">
                   🚀 Standort wählen
                 </Button>

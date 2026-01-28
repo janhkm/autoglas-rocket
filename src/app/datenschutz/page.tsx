@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: '/datenschutz/',
+    canonical: '/datenschutz',
   },
 };
 
@@ -54,7 +54,7 @@ export default function DatenschutzPage() {
                   <strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br />
                   Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten 
                   können Sie dem{' '}
-                  <Link href="/impressum/" className="text-orange-500 hover:text-orange-600">Impressum</Link> 
+                  <Link href="/impressum" className="text-orange-500 hover:text-orange-600">Impressum</Link> 
                   {' '}dieser Website entnehmen.
                 </p>
 

@@ -12,6 +12,8 @@
     "seo:audit": "npx ts-node --project tsconfig.scripts.json scripts/seo-audit.ts",
     "seo:sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
     "sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
+    "build:stats": "npx ts-node --project tsconfig.scripts.json scripts/build-stats.ts",
+    "validate:quality": "npx ts-node --project tsconfig.scripts.json scripts/validate-pseo-quality.ts",
     "postbuild": "npm run sitemap"
   },
   "dependencies": {

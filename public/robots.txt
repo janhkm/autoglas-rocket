@@ -1,4 +1,4 @@
-# *
+# Default rules for all crawlers
 User-agent: *
 Allow: /
 Disallow: /api/
@@ -6,6 +6,62 @@ Disallow: /termin-anfragen
 Disallow: /_next/
 Disallow: /impressum/
 Disallow: /datenschutz/
+
+# ============================================
+# AI Retrieval Crawlers (ALLOW for citation)
+# These crawlers fetch pages for AI-powered search
+# ============================================
+
+# OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic / Claude
+User-agent: ClaudeBot
+Allow: /
+
+# Apple Intelligence
+User-agent: Applebot-Extended
+Allow: /
+
+# ============================================
+# AI Training Crawlers (BLOCK)
+# These crawlers collect data for model training
+# ============================================
+
+# Google Gemini Training
+User-agent: Google-Extended
+Disallow: /
+
+# Common Crawl (used by many LLMs for training)
+User-agent: CCBot
+Disallow: /
+
+# ByteDance / TikTok AI
+User-agent: Bytespider
+Disallow: /
+
+# Cohere AI Training
+User-agent: cohere-ai
+Disallow: /
+
+# Meta AI Training
+User-agent: FacebookBot
+Disallow: /
+
+# ============================================
+# LLM Context Files
+# ============================================
+# Allow access to LLM-specific index files
+Allow: /llms.txt
+Allow: /llms-full.txt
 
 # Host
 Host: https://autoglas-rocket.de

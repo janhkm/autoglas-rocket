@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: '/impressum/',
+    canonical: '/impressum',
   },
 };
 

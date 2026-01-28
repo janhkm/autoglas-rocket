@@ -24,6 +24,14 @@ export interface Location {
   population?: number;
   // SEO-relevante Felder
   priority?: number; // 1-10, höher = wichtiger für SEO
+  // Extended pSEO fields (optional - override auto-generated values)
+  canonicalPath?: string;      // e.g. "/autoglas-berlin/" - auto-generated if not set
+  lastModified?: string;       // ISO date string for accurate dateModified in schema
+  wikidataId?: string;         // e.g. "Q64" for Berlin - for Entity-Based Optimization (sameAs links)
+  // Metadata overrides (optional - auto-generated if not set)
+  title?: string;              // Custom page title (30-70 chars target)
+  metaDescription?: string;    // Custom meta description (100-170 chars target)
+  h1?: string;                 // Custom H1 heading (10-80 chars target)
 }
 
 export const locations: Location[] = [
@@ -36,7 +44,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 11103043,
-    priority: 10
+    priority: 10,
+    wikidataId: "Q985"
   },
   {
     slug: "bayern",
@@ -44,7 +53,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 13140183,
-    priority: 10
+    priority: 10,
+    wikidataId: "Q980"
   },
   {
     slug: "berlin",
@@ -53,7 +63,8 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 3664088,
     coordinates: { lat: 52.5200, lng: 13.4050 },
-    priority: 10
+    priority: 10,
+    wikidataId: "Q64"
   },
   {
     slug: "brandenburg",
@@ -61,7 +72,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 2531071,
-    priority: 8
+    priority: 8,
+    wikidataId: "Q1208"
   },
   {
     slug: "bremen",
@@ -69,7 +81,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 680130,
-    priority: 7
+    priority: 7,
+    wikidataId: "Q24879"
   },
   {
     slug: "hamburg",
@@ -78,7 +91,8 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 1853935,
     coordinates: { lat: 53.5511, lng: 9.9937 },
-    priority: 10
+    priority: 10,
+    wikidataId: "Q1055"
   },
   {
     slug: "hessen",
@@ -86,7 +100,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 6293154,
-    priority: 9
+    priority: 9,
+    wikidataId: "Q1199"
   },
   {
     slug: "mecklenburg-vorpommern",
@@ -94,7 +109,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 1610774,
-    priority: 6
+    priority: 6,
+    wikidataId: "Q1196"
   },
   {
     slug: "niedersachsen",
@@ -102,7 +118,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 8003421,
-    priority: 9
+    priority: 9,
+    wikidataId: "Q1197"
   },
   {
     slug: "nordrhein-westfalen",
@@ -110,7 +127,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 17925570,
-    priority: 10
+    priority: 10,
+    wikidataId: "Q1198"
   },
   {
     slug: "rheinland-pfalz",
@@ -118,7 +136,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 4098391,
-    priority: 8
+    priority: 8,
+    wikidataId: "Q1200"
   },
   {
     slug: "saarland",
@@ -126,7 +145,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 983991,
-    priority: 6
+    priority: 6,
+    wikidataId: "Q1201"
   },
   {
     slug: "sachsen",
@@ -134,7 +154,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 4056941,
-    priority: 8
+    priority: 8,
+    wikidataId: "Q1202"
   },
   {
     slug: "sachsen-anhalt",
@@ -142,7 +163,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 2180684,
-    priority: 7
+    priority: 7,
+    wikidataId: "Q1206"
   },
   {
     slug: "schleswig-holstein",
@@ -150,7 +172,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 2910875,
-    priority: 8
+    priority: 8,
+    wikidataId: "Q1194"
   },
   {
     slug: "thueringen",
@@ -158,7 +181,8 @@ export const locations: Location[] = [
     type: "bundesland",
     parentSlug: null,
     population: 2120237,
-    priority: 7
+    priority: 7,
+    wikidataId: "Q1205"
   },
 
   // =====================================================

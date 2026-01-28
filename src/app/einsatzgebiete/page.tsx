@@ -22,13 +22,13 @@ const siteUrl = process.env.SITE_URL || 'https://autoglas-rocket.de';
 export const metadata: Metadata = {
   title: 'Einsatzgebiete – Scheibenwechsel deutschlandweit | Autoglas-Rocket',
   description: 'Scheibenwechsel deutschlandweit ✓ Mobiler Service in allen 16 Bundesländern ✓ Alle Städte & Regionen ✓ Front- & Heckscheibe ✓ Teilkasko* ✓ Jetzt Einsatzgebiet finden!',
-  alternates: { canonical: '/einsatzgebiete/' },
+  alternates: { canonical: '/einsatzgebiete' },
   openGraph: {
     title: 'Scheibenwechsel deutschlandweit – Alle Einsatzgebiete | Autoglas-Rocket',
     description: 'Mobiler Autoglas-Service in ganz Deutschland. Finden Sie Ihr Einsatzgebiet für professionellen Scheibenwechsel.',
     type: 'website',
     locale: 'de_DE',
-    url: `${siteUrl}/einsatzgebiete/`,
+    url: `${siteUrl}/einsatzgebiete`,
     images: [
       {
         url: `${siteUrl}/autoglas-rocket-logo.png`,
@@ -291,7 +291,7 @@ export default function EinsatzgebietePage() {
                 {topStaedte.map((city) => (
                   <Link
                     key={city.slug}
-                    href={`/autoglas-${city.slug}/`}
+                    href={`/autoglas-${city.slug}`}
                     className="bg-white p-5 rounded-xl shadow-sm hover:shadow-lg border border-slate-200 hover:border-orange-300 transition-all group"
                   >
                     <div className="flex items-center gap-3">
@@ -400,7 +400,7 @@ export default function EinsatzgebietePage() {
                     >
                       {/* Bundesland Header */}
                       <Link
-                        href={`/autoglas-${bundesland.slug}/`}
+                        href={`/autoglas-${bundesland.slug}`}
                         className="flex items-center gap-4 mb-6 group"
                       >
                         <div className="w-16 h-16 bg-orange-500 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/25">
@@ -435,7 +435,7 @@ export default function EinsatzgebietePage() {
                             {regierungsbezirke.map(rb => (
                               <Link
                                 key={rb.slug}
-                                href={`/autoglas-${rb.slug}/`}
+                                href={`/autoglas-${rb.slug}`}
                                 className="px-4 py-2 bg-white text-sm text-slate-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors border border-slate-200 hover:border-orange-300"
                               >
                                 {rb.name}
@@ -455,7 +455,7 @@ export default function EinsatzgebietePage() {
                             {alleStaedte.map(stadt => (
                               <Link
                                 key={stadt.slug}
-                                href={`/autoglas-${stadt.slug}/`}
+                                href={`/autoglas-${stadt.slug}`}
                                 className="px-4 py-2 bg-white text-sm font-medium text-slate-700 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors border border-slate-200 hover:border-orange-300"
                               >
                                 {stadt.name}
@@ -475,7 +475,7 @@ export default function EinsatzgebietePage() {
                             {direkteBezirke.map(bezirk => (
                               <Link
                                 key={bezirk.slug}
-                                href={`/autoglas-${bezirk.slug}/`}
+                                href={`/autoglas-${bezirk.slug}`}
                                 className="px-3 py-1.5 bg-orange-100 text-sm text-orange-700 hover:bg-orange-200 rounded-lg transition-colors"
                               >
                                 {bezirk.name}
@@ -495,7 +495,7 @@ export default function EinsatzgebietePage() {
                             {alleDirektenStadtteile.map(stadtteil => (
                               <Link
                                 key={stadtteil.slug}
-                                href={`/autoglas-${stadtteil.slug}/`}
+                                href={`/autoglas-${stadtteil.slug}`}
                                 className="px-3 py-1.5 bg-slate-200 text-xs text-slate-600 hover:bg-slate-300 hover:text-slate-800 rounded transition-colors"
                               >
                                 {stadtteil.name}
@@ -525,7 +525,7 @@ export default function EinsatzgebietePage() {
                                     {bezirke.map(b => (
                                       <Link
                                         key={b.slug}
-                                        href={`/autoglas-${b.slug}/`}
+                                        href={`/autoglas-${b.slug}`}
                                         className="px-2.5 py-1 bg-orange-100 text-xs text-orange-700 hover:bg-orange-200 rounded transition-colors"
                                       >
                                         {b.name}
@@ -542,7 +542,7 @@ export default function EinsatzgebietePage() {
                                     {stadtteile.map(st => (
                                       <Link
                                         key={st.slug}
-                                        href={`/autoglas-${st.slug}/`}
+                                        href={`/autoglas-${st.slug}`}
                                         className="px-2.5 py-1 bg-slate-100 text-xs text-slate-600 hover:bg-slate-200 rounded transition-colors"
                                       >
                                         {st.name}

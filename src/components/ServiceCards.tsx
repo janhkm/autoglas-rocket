@@ -71,7 +71,7 @@ export default function ServiceCards({ services, citySlug }: ServiceCardsProps) 
 
                 {/* Link */}
                 <Link
-                  href={citySlug ? `/${service.slug}-${citySlug}/` : `/autoglas-berlin/`}
+                  href={citySlug ? `/${service.slug}-${citySlug}/` : `/dienstleistungen/`}
                   className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors group/link"
                 >
                   Mehr erfahren

@@ -255,6 +255,46 @@ export function getDistrictLinks(citySlug: string, limit: number = 10): Internal
 }
 
 /**
+ * Generiert Links zu Stadtteilen für Service-Location-Seiten
+ * Ermöglicht Service-Location-Seiten, auf Stadtteil-Seiten zu verlinken
+ */
+export function getDistrictLinksForServiceLocation(
+  locationSlug: string,
+  serviceSlug: string,
+  limit: number = 6
+): InternalLink[] {
+  const location = getLocationBySlug(locationSlug);
+  if (!location) return [];
+  
+  // Wenn es eine Stadt ist, hole Stadtteile
+  if (location.type === 'kreisfreie-stadt') {
+    const districts = getDistrictLinks(locationSlug, limit);
+    // Link zu Location-Seiten (nicht Service-Location) für bessere Link-Equity
+    return districts.map(d => ({
+      ...d,
+      href: d.href, // Keep as location link for link equity
+      text: d.text,
+      title: `Autoglas-Service in ${d.text}`
+    }));
+  }
+  
+  // Wenn es ein Bundesland ist, hole wichtige Städte
+  if (location.type === 'bundesland') {
+    const children = getChildLocations(locationSlug)
+      .filter(l => l.type === 'kreisfreie-stadt' || (l.priority && l.priority >= 7))
+      .slice(0, limit);
+    
+    return children.map(child => ({
+      href: getLocationUrl(child.slug),
+      text: child.name,
+      title: `Autoglas-Service in ${child.name}`
+    }));
+  }
+  
+  return [];
+}
+
+/**
  * Generiert Breadcrumb-Items basierend auf der Hierarchie
  */
 export function generateBreadcrumbs(

@@ -15,6 +15,104 @@ export interface VehicleModel {
   brandSlug: string;
   years: string; // z.B. "2019-2024"
   popular: boolean;
+  // Extended SEO content fields (optional - fallback generation if not provided)
+  glasTypes?: string[];         // e.g. ["Frontscheibe mit Regensensor", "Akustikglas"]
+  commonDamages?: string[];     // e.g. ["Steinschlag A-Säule", "Riss durch Temperatur"]
+  priceRange?: string;          // e.g. "350-600€"
+  repairTime?: string;          // e.g. "1,5-2 Stunden"
+  specialFeatures?: string[];   // e.g. ["Kalibrierung ADAS", "Head-Up-Display"]
+}
+
+// Vehicle content generation for SEO enrichment
+export interface VehicleContent {
+  glasTypes: string[];
+  commonDamages: string[];
+  specialFeatures: string[];
+  priceRange: string;
+  repairTime: string;
+}
+
+/**
+ * Generates vehicle-specific content for SEO
+ * Uses model-specific data if available, otherwise generates based on brand/model characteristics
+ */
+export function getVehicleContent(brand: VehicleBrand, model: VehicleModel): VehicleContent {
+  // If model has specific data, use it
+  if (model.glasTypes && model.commonDamages && model.specialFeatures) {
+    return {
+      glasTypes: model.glasTypes,
+      commonDamages: model.commonDamages,
+      specialFeatures: model.specialFeatures,
+      priceRange: model.priceRange || '350-650€',
+      repairTime: model.repairTime || '1,5-2 Stunden'
+    };
+  }
+  
+  // Generate content based on brand and vehicle characteristics
+  const isGermanBrand = ['vw', 'bmw', 'mercedes', 'audi', 'opel', 'porsche'].includes(brand.slug);
+  const isPremiumBrand = ['bmw', 'mercedes', 'audi', 'porsche', 'volvo', 'tesla'].includes(brand.slug);
+  const isElectric = ['id3', 'id4', 'model-3', 'model-y', 'model-s', 'model-x', 'e-tron', 'ioniq5', 'ev6', 'leaf', 'zoe', 'spring', 'e'].includes(model.slug);
+  
+  // Glass types based on vehicle class
+  const glasTypes = [
+    `Original-Frontscheibe für ${brand.name} ${model.name}`,
+    'OEM-Äquivalent in Erstausrüster-Qualität',
+  ];
+  
+  if (isPremiumBrand || isElectric) {
+    glasTypes.push('Akustik-Verbundglas für verbesserte Geräuschdämmung');
+    glasTypes.push('Wärmeschutzverglasung mit UV-Filter');
+  } else {
+    glasTypes.push('Optionale Wärmeschutzverglasung');
+  }
+  
+  // Common damages
+  const commonDamages = [
+    'Steinschlag durch Straßensplit oder Rollsplitt',
+    'Rissbildung durch Temperaturschwankungen',
+    'Kratzer durch verschlissene Scheibenwischer',
+  ];
+  
+  if (isPremiumBrand) {
+    commonDamages.push('Beschädigung im Bereich der Kamerasysteme');
+  }
+  
+  // Special features based on brand/model
+  const specialFeatures: string[] = [];
+  
+  if (isPremiumBrand || isElectric) {
+    specialFeatures.push('Kalibrierung Fahrassistenzsysteme (ADAS)');
+    specialFeatures.push('Frontkamera-Neujustierung');
+  }
+  
+  if (model.years.includes('2020') || model.years.includes('2021') || model.years.includes('2022') || model.years.includes('2023') || model.years.includes('2024')) {
+    specialFeatures.push('Regensensor-Anpassung');
+  }
+  
+  if (isGermanBrand) {
+    specialFeatures.push('Verwendung von Original-Ersatzteilen');
+  }
+  
+  if (specialFeatures.length === 0) {
+    specialFeatures.push('Fachgerechte Montage nach Herstellervorgaben');
+    specialFeatures.push('Dichtigkeitsprüfung nach Einbau');
+  }
+  
+  // Price range based on brand
+  let priceRange = '350-550€';
+  if (isPremiumBrand) {
+    priceRange = '450-850€';
+  } else if (isElectric) {
+    priceRange = '400-700€';
+  }
+  
+  return {
+    glasTypes,
+    commonDamages,
+    specialFeatures,
+    priceRange,
+    repairTime: isPremiumBrand ? '2-3 Stunden' : '1,5-2 Stunden'
+  };
 }
 
 export const brands: VehicleBrand[] = [
