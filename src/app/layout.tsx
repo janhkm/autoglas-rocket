@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { DM_Sans, Space_Grotesk } from 'next/font/google';
+import Script from 'next/script';
 import './globals.css';
 import { generateOrganizationSchema, schemaToJsonLd } from '@/lib/schema';
 import CookieBanner from '@/components/CookieBanner';
+
+const GA_MEASUREMENT_ID = 'G-26JYTLYQXG';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -106,6 +109,19 @@ export default function RootLayout({
   return (
     <html lang="de" className={`${dmSans.variable} ${spaceGrotesk.variable}`}>
       <head>
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         {/* Organization Schema - Global für die gesamte Website */}
         <script
           type="application/ld+json"
