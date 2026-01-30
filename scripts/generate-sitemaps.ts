@@ -133,7 +133,7 @@ function generatePagesSitemap(): SitemapUrl[] {
       priority: 1.0,
     },
     {
-      loc: `${BASE_URL}/einsatzgebiete`,
+      loc: `${BASE_URL}/einsatzgebiete/`,
       lastmod,
       changefreq: 'weekly',
       priority: 0.8,
@@ -145,7 +145,7 @@ function generateCitiesSitemap(): SitemapUrl[] {
   const lastmod = new Date().toISOString();
   
   return locations.map(location => ({
-    loc: `${BASE_URL}/autoglas-${location.slug}`,
+    loc: `${BASE_URL}/autoglas-${location.slug}/`,
     lastmod,
     changefreq: 'weekly' as const,
     priority: getLocationPriority(location),
@@ -173,7 +173,7 @@ function generateServicesSitemap(): SitemapUrl[] {
   mainServices.forEach(service => {
     importantLocations.forEach(location => {
       urls.push({
-        loc: `${BASE_URL}/${service.slug}-${location.slug}`,
+        loc: `${BASE_URL}/${service.slug}-${location.slug}/`,
         lastmod,
         changefreq: 'weekly',
         priority: getServiceLocationPriority(location),
@@ -191,7 +191,7 @@ function generateVehiclesSitemap(): SitemapUrl[] {
   const popularModels = models.filter(m => m.popular);
   
   return popularModels.map(model => ({
-    loc: `${BASE_URL}/scheibenwechsel-${model.brandSlug}-${model.slug}`,
+    loc: `${BASE_URL}/scheibenwechsel-${model.brandSlug}-${model.slug}/`,
     lastmod,
     changefreq: 'monthly' as const,
     priority: getVehiclePriority(model),

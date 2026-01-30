@@ -22,7 +22,7 @@ const siteUrl = process.env.SITE_URL || 'https://autoglas-rocket.de';
 export const metadata: Metadata = {
   title: 'Einsatzgebiete – Scheibenwechsel deutschlandweit | Autoglas-Rocket',
   description: 'Scheibenwechsel deutschlandweit ✓ Mobiler Service in allen 16 Bundesländern ✓ Alle Städte & Regionen ✓ Front- & Heckscheibe ✓ Teilkasko* ✓ Jetzt Einsatzgebiet finden!',
-  alternates: { canonical: '/einsatzgebiete' },
+  alternates: { canonical: '/einsatzgebiete/' },
   openGraph: {
     title: 'Scheibenwechsel deutschlandweit – Alle Einsatzgebiete | Autoglas-Rocket',
     description: 'Mobiler Autoglas-Service in ganz Deutschland. Finden Sie Ihr Einsatzgebiet für professionellen Scheibenwechsel.',
