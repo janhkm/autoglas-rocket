@@ -9,11 +9,11 @@
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
-    "seo:audit": "npx ts-node --project tsconfig.scripts.json scripts/seo-audit.ts",
-    "seo:sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
-    "sitemap": "npx ts-node --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
-    "build:stats": "npx ts-node --project tsconfig.scripts.json scripts/build-stats.ts",
-    "validate:quality": "npx ts-node --project tsconfig.scripts.json scripts/validate-pseo-quality.ts",
+    "seo:audit": "npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/seo-audit.ts",
+    "seo:sitemap": "npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
+    "sitemap": "npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/generate-sitemaps.ts",
+    "build:stats": "npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/build-stats.ts",
+    "validate:quality": "npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/validate-pseo-quality.ts",
     "postbuild": "npm run sitemap"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "tailwindcss": "^4",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
 }

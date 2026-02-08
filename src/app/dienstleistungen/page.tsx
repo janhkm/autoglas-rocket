@@ -6,6 +6,7 @@ import FAQ from '@/components/FAQ';
 import { services, allGlassServices } from '@/data/services';
 import { getLocationsByType } from '@/data/locations';
 import { brands, getPopularVehicleCombinations } from '@/data/vehicles';
+import { getBrandHubLinks } from '@/lib/internal-links';
 import { 
   generateBreadcrumbSchema, 
   generateFAQSchema, 
@@ -68,6 +69,9 @@ const topStaedte = getLocationsByType('kreisfreie-stadt')
 
 // Beliebte Fahrzeuge
 const popularVehicles = getPopularVehicleCombinations().slice(0, 12);
+
+// Brand Hub Links
+const brandHubLinks = getBrandHubLinks();
 
 export default function DienstleistungenPage() {
   // Schema
@@ -213,8 +217,29 @@ export default function DienstleistungenPage() {
           </div>
         </section>
         
-        {/* Service nach Fahrzeug */}
+        {/* Marken-Hub Links */}
         <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-bold mb-6">Scheibenwechsel nach Marke</h2>
+            <p className="text-gray-600 mb-8">
+              Wir bieten professionellen Scheibenwechsel für alle gängigen Fahrzeugmarken:
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {brandHubLinks.map((link, index) => (
+                <Link
+                  key={index}
+                  href={link.href}
+                  className="bg-gray-50 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow text-center font-medium text-blue-600 hover:text-blue-800"
+                >
+                  {link.text}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+        
+        {/* Service nach Fahrzeug */}
+        <section className="py-12 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl font-bold mb-6">Scheibenwechsel nach Fahrzeug</h2>
             <p className="text-gray-600 mb-8">

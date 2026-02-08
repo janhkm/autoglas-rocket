@@ -13,6 +13,7 @@ import {
   brands, 
   getBrandBySlug, 
   getModelBySlug, 
+  getModelsByBrand,
   getPopularVehicleCombinations 
 } from '@/data/vehicles';
 
@@ -20,6 +21,7 @@ import {
 import LocationPage from './LocationPage';
 import ServiceLocationPage from './ServiceLocationPage';
 import VehiclePage from './VehiclePage';
+import BrandPage from './BrandPage';
 
 // ISR: Revalidate pages every 24 hours
 // This allows incremental updates without full rebuilds
@@ -32,7 +34,7 @@ interface PageProps {
 }
 
 // Types for parsed slugs
-type PageType = 'location' | 'service-location' | 'vehicle' | 'unknown';
+type PageType = 'location' | 'service-location' | 'vehicle' | 'brand' | 'unknown';
 
 interface ParsedSlug {
   type: PageType;
@@ -65,6 +67,13 @@ function parseSlug(slug: string): ParsedSlug {
         if (model) {
           return { type: 'vehicle', brandSlug: brand.slug, modelSlug };
         }
+      }
+    }
+
+    // Check for brand-only hub: /scheibenwechsel-[brand]/
+    for (const brand of brands) {
+      if (rest === brand.slug) {
+        return { type: 'brand', brandSlug: brand.slug };
       }
     }
     
@@ -111,6 +120,11 @@ export async function generateStaticParams() {
     }
   }
 
+  // Brand hub pages (one per brand)
+  for (const brand of brands) {
+    params.push({ slug: `scheibenwechsel-${brand.slug}` });
+  }
+
   // T3: Vehicle pages (popular only for initial build)
   for (const { brand, model } of getPopularVehicleCombinations()) {
     params.push({ slug: `scheibenwechsel-${brand}-${model}` });
@@ -139,12 +153,17 @@ function generateLocationTitle(location: ReturnType<typeof getLocationBySlug>, h
     case 'kreisfreie-stadt':
       return `Autoglas ${location.name} ᐅ Mobiler Service & Reparatur ${currentYear} ✓ 0€*`;
     case 'stadtbezirk': {
-      const parentCity = hierarchy.find(h => h?.type === 'kreisfreie-stadt' || h?.type === 'bundesland');
-      return `Autoglas ${location.name}${parentCity ? ` (${parentCity.name})` : ''} » Mobiler Vor-Ort-Service`;
+      // Prefer kreisfreie-stadt, only fallback to bundesland if no city found
+      const parentCity = hierarchy.find(h => h?.type === 'kreisfreie-stadt') 
+        || hierarchy.find(h => h?.type === 'bundesland');
+      return `Autoglas ${location.name}${parentCity ? ` ${parentCity.name}` : ''} » Mobiler Vor-Ort-Service`;
     }
     case 'stadtteil': {
-      const parent = hierarchy.find(h => h?.type === 'kreisfreie-stadt' || h?.type === 'bundesland');
-      return `Autoglas-Service ${location.name}${parent ? ` ${parent.name}` : ''} ᐅ Schnell & Mobil`;
+      // Prefer kreisfreie-stadt for uniqueness (avoids "Altstadt (Bayern)" duplicates)
+      const parentCity = hierarchy.find(h => h?.type === 'kreisfreie-stadt')
+        || hierarchy.find(h => h?.type === 'stadtbezirk')
+        || hierarchy.find(h => h?.type === 'bundesland');
+      return `Autoglas-Service ${location.name}${parentCity ? ` ${parentCity.name}` : ''} ᐅ Schnell & Mobil`;
     }
     default:
       return `Autoglas ${location.name} – Mobiler Glasservice | Autoglas-Rocket`;
@@ -306,6 +325,34 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         },
       };
     }
+    case 'brand': {
+      const brandData = getBrandBySlug(parsed.brandSlug!);
+      if (!brandData) return { title: 'Seite nicht gefunden' };
+      
+      const brandModels = getModelsByBrand(parsed.brandSlug!);
+      const popularModelNames = brandModels.filter(m => m.popular).slice(0, 3).map(m => m.name).join(', ');
+      const title = `Scheibenwechsel ${brandData.name} ᐅ Alle Modelle ${currentYear} ✓ Mobiler Service`;
+      const description = `Scheibenwechsel für alle ${brandData.name} Modelle: ${popularModelNames} u.v.m. ✓ Originalscheiben ✓ Mobiler Service deutschlandweit ✓ Teilkasko* ✓ Jetzt anfragen!`;
+      const canonicalUrl = `https://autoglas-rocket.de/${slug}/`;
+      
+      return {
+        title,
+        description,
+        alternates: { canonical: canonicalUrl },
+        openGraph: {
+          title,
+          description,
+          type: 'website',
+          locale: 'de_DE',
+          url: canonicalUrl,
+        },
+        twitter: {
+          card: 'summary',
+          title,
+          description,
+        },
+      };
+    }
     case 'vehicle': {
       const brand = getBrandBySlug(parsed.brandSlug!);
       const model = getModelBySlug(parsed.brandSlug!, parsed.modelSlug!);
@@ -349,6 +396,8 @@ export default async function DynamicPage({ params }: PageProps) {
       return <LocationPage locationSlug={parsed.locationSlug!} />;
     case 'service-location':
       return <ServiceLocationPage serviceSlug={parsed.serviceSlug!} locationSlug={parsed.locationSlug!} />;
+    case 'brand':
+      return <BrandPage brandSlug={parsed.brandSlug!} />;
     case 'vehicle':
       return <VehiclePage brandSlug={parsed.brandSlug!} modelSlug={parsed.modelSlug!} />;
     default:

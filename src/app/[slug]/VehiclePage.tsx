@@ -368,9 +368,17 @@ export default function VehiclePage({ brandSlug, modelSlug }: VehiclePageProps) 
           <section className="py-12 bg-white">
             <div className="container mx-auto px-4">
               <div className="max-w-4xl mx-auto">
-                <h3 className="text-xl font-bold text-slate-900 mb-6">
-                  Weitere {brand.name} Modelle
-                </h3>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold text-slate-900">
+                    Weitere {brand.name} Modelle
+                  </h3>
+                  <Link
+                    href={`/scheibenwechsel-${brandSlug}/`}
+                    className="text-orange-600 hover:text-orange-700 font-medium text-sm"
+                  >
+                    Alle {brand.name} Modelle &rarr;
+                  </Link>
+                </div>
                 <div className="flex flex-wrap gap-3">
                   {otherModelLinks.map((otherModel, index) => (
                     <Link

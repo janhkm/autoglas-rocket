@@ -358,6 +358,7 @@ export function getFooterLinks(): {
   topCities: InternalLink[];
   bundeslaender: InternalLink[];
   vehicles: InternalLink[];
+  brandHubs: InternalLink[];
 } {
   return {
     services: mainServices.map(service => ({
@@ -367,8 +368,31 @@ export function getFooterLinks(): {
     })),
     topCities: getTopCityLinks(8),
     bundeslaender: getBundeslandLinks().slice(0, 8),
-    vehicles: getPopularVehicleLinks(8)
+    vehicles: getPopularVehicleLinks(8),
+    brandHubs: getBrandHubLinks(8)
   };
+}
+
+/**
+ * Generiert Links zu allen Marken-Hub-Seiten
+ */
+export function getBrandHubLinks(limit?: number): InternalLink[] {
+  const germanBrands = ['vw', 'bmw', 'mercedes', 'audi', 'opel', 'porsche'];
+  const sortedBrands = [...brands].sort((a, b) => {
+    const aIsGerman = germanBrands.includes(a.slug);
+    const bIsGerman = germanBrands.includes(b.slug);
+    if (aIsGerman && !bIsGerman) return -1;
+    if (!aIsGerman && bIsGerman) return 1;
+    return 0;
+  });
+
+  const result = sortedBrands.map(brand => ({
+    href: `/scheibenwechsel-${brand.slug}/`,
+    text: brand.name,
+    title: `Scheibenwechsel für alle ${brand.name} Modelle`
+  }));
+
+  return limit ? result.slice(0, limit) : result;
 }
 
 /**

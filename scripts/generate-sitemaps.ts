@@ -186,16 +186,31 @@ function generateServicesSitemap(): SitemapUrl[] {
 
 function generateVehiclesSitemap(): SitemapUrl[] {
   const lastmod = new Date().toISOString();
-  
+  const urls: SitemapUrl[] = [];
+
+  // Brand hub pages (one per brand)
+  for (const brand of brands) {
+    urls.push({
+      loc: `${BASE_URL}/scheibenwechsel-${brand.slug}/`,
+      lastmod,
+      changefreq: 'weekly',
+      priority: 0.8,
+    });
+  }
+
   // Nur populäre Modelle für bessere Qualität
   const popularModels = models.filter(m => m.popular);
   
-  return popularModels.map(model => ({
-    loc: `${BASE_URL}/scheibenwechsel-${model.brandSlug}-${model.slug}/`,
-    lastmod,
-    changefreq: 'monthly' as const,
-    priority: getVehiclePriority(model),
-  }));
+  for (const model of popularModels) {
+    urls.push({
+      loc: `${BASE_URL}/scheibenwechsel-${model.brandSlug}-${model.slug}/`,
+      lastmod,
+      changefreq: 'monthly' as const,
+      priority: getVehiclePriority(model),
+    });
+  }
+
+  return urls;
 }
 
 // ============================================

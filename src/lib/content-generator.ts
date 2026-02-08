@@ -5,6 +5,7 @@
  */
 
 import { Location, getLocationHierarchy, getLocationBySlug } from '@/data/locations';
+import { generateModularContent } from './content-modules';
 
 // Synonym-Pools für verschiedene Textbausteine
 export const synonymPools = {
@@ -117,12 +118,12 @@ export const synonymPools = {
     "für {city} und umliegende Orte"
   ],
 
-  // Lokale Vorteile
+  // Mobiler Service Vorteile (NICHT ortsansässig – wir sind ein mobiles Team)
   localBenefits: [
-    "Als Ihr lokaler Partner in {city} kennen wir die Gegebenheiten vor Ort",
-    "Unsere Techniker sind regelmäßig in {city} unterwegs",
-    "Durch unsere Präsenz in {city} garantieren wir kurze Anfahrtswege",
-    "Wir haben langjährige Erfahrung im Servicegebiet {city}"
+    "Unser mobiles Team kommt direkt zu Ihnen nach {city} – einfach und bequem",
+    "Unsere Techniker fahren regelmäßig nach {city} und erledigen den Scheibenwechsel direkt bei Ihnen vor Ort",
+    "Für Ihren Scheibenwechsel in {city} kommen wir zu Ihrem Wunschort – ob nach Hause, zur Arbeit oder an einen anderen Ort",
+    "Unser mobiler Service deckt {city} und die gesamte Region ab – kein Werkstattbesuch nötig"
   ],
 
   // Glasschaden-Risiko Formulierungen
@@ -240,6 +241,9 @@ export function generateCityIntro(cityName: string, citySlug: string): string {
 /**
  * Generiert erweiterten lokalen Content für SEO (400+ Wörter)
  * 
+ * Uses the modular content system (content-modules.ts) for locations with 
+ * enrichment data, falling back to synonym pools for non-enriched locations.
+ * 
  * Optimiert für LLM-Extraktion: Jeder Abschnitt zielt auf 134-167 Wörter
  * (Answer Capsule Pattern aus GEO-Forschung)
  */
@@ -250,122 +254,52 @@ export function generateExtendedLocalContent(location: Location): {
   urgencySection: string;
   serviceArea: string;
 } {
-  const seed = `extended-${location.slug}`;
-  const cityName = location.name;
-  
-  // === INTRO (Target: 140-160 Wörter) ===
-  const greeting = pickFromPool(synonymPools.greetings, seed + '-greeting');
-  const serviceDesc = pickFromPool(synonymPools.serviceDescriptions, seed + '-service');
-  const mobileDesc = pickFromPool(synonymPools.mobileService, seed + '-mobile');
-  const regional = replacePlaceholders(
-    pickFromPool(synonymPools.regional, seed + '-regional'),
-    { city: cityName }
-  );
-  const insurance = pickFromPool(synonymPools.insurance, seed + '-intro-ins');
-  
-  const intro = `${greeting} ${regional}! ${serviceDesc}. ${mobileDesc}. ` +
-    `Ob Steinschlag, Riss oder kompletter Scheibenaustausch – unser Team ist für Sie da. ` +
-    `${insurance}. Mit über 1000 zufriedenen Kunden deutschlandweit sind wir Ihr verlässlicher Partner für Autoglas-Service. ` +
-    `Unsere zertifizierten Techniker arbeiten ausschließlich mit hochwertigen Originalscheiben oder geprüften OEM-Äquivalenten. ` +
-    `Vereinbaren Sie noch heute einen Termin – wir sind meist innerhalb von 24 bis 48 Stunden bei Ihnen vor Ort.`;
-  
-  // === LOKALER BEZUG (Target: 140-160 Wörter) ===
-  const localBenefit = replacePlaceholders(
-    pickFromPool(synonymPools.localBenefits, seed + '-local'),
-    { city: cityName }
-  );
-  const glassRisk = pickFromPool(synonymPools.glassRiskReasons, seed + '-risk');
-  const urgencyReason = pickFromPool(synonymPools.urgencyReasons, seed + '-local-urgency');
-  
-  const localSection = `${localBenefit}. ${glassRisk}. ${urgencyReason}. ` +
-    `Deshalb ist es wichtig, einen zuverlässigen Partner für Scheibenwechsel in ${cityName} an der Seite zu haben. ` +
-    `Wir kennen die lokalen Gegebenheiten und sind regelmäßig in ${cityName} und der näheren Umgebung im Einsatz. ` +
-    `Dabei spielt es keine Rolle, ob Sie in der Innenstadt wohnen oder am Stadtrand – unser mobiler Service kommt zu Ihnen. ` +
-    `Profitieren Sie von kurzen Wartezeiten und flexiblen Terminoptionen, die sich an Ihren Alltag anpassen.`;
-  
-  // === WARUM WIR (Target: 140-160 Wörter) ===
-  const quality = pickFromPool(synonymPools.quality, seed + '-quality');
-  const experience = pickFromPool(synonymPools.experience, seed + '-exp');
-  const servicePromise = pickFromPool(synonymPools.servicePromises, seed + '-promise');
-  
-  const whyUs = `${quality}. ${experience}. ${servicePromise}. ` +
-    `Unsere Techniker sind nach höchsten Standards ausgebildet und verfügen über langjährige Erfahrung mit allen Fahrzeugtypen. ` +
-    `Bei jedem Scheibenwechsel führen wir eine gründliche Qualitätskontrolle durch und prüfen die einwandfreie Funktion aller betroffenen Systeme. ` +
-    `Falls Ihr Fahrzeug über Assistenzsysteme wie Spurhalteassistent oder Abstandswarner verfügt, übernehmen wir auch die fachgerechte Kalibrierung. ` +
-    `Transparente Preise und die komplette Abwicklung mit Ihrer Versicherung gehören bei uns zum Standard – Sie zahlen nur Ihre vereinbarte Selbstbeteiligung.`;
-  
-  // === DRINGLICHKEIT (Target: 140-160 Wörter) ===
-  const urgency = pickFromPool(synonymPools.urgencyReasons, seed + '-urgency');
-  const replacement = pickFromPool(synonymPools.replacement, seed + '-replacement');
-  
-  const urgencySection = `${urgency}. ${replacement}. ` +
-    `Wir wechseln sowohl Front- als auch Heckscheiben professionell vor Ort – in der Regel innerhalb von ein bis zwei Stunden. ` +
-    `Nach dem Einbau muss der spezielle Kleber noch etwa eine Stunde aushärten, dann sind Sie wieder sicher unterwegs. ` +
-    `Wichtig zu wissen: Eine beschädigte Windschutzscheibe kann bei der Hauptuntersuchung zu Problemen führen und Ihre Sicherheit beeinträchtigen. ` +
-    `Handeln Sie daher zeitnah und nutzen Sie unseren unkomplizierten Terminservice. ` +
-    `Bei den meisten Versicherungen ist der Scheibenwechsel über die Teilkasko abgedeckt – wir klären das gerne für Sie.`;
-  
-  // === SERVICEGEBIET (Target: 140-160 Wörter) ===
-  let serviceArea = '';
-  if (location.plz && location.plz.length > 0) {
-    const plzList = location.plz.slice(0, 5).join(', ');
-    const plzText = replacePlaceholders(
-      pickFromPool(synonymPools.plzServiceArea, seed + '-plz'),
-      { city: cityName }
-    );
-    serviceArea = `${plzText}. Dazu gehören unter anderem die Postleitzahlen ${plzList}${location.plz.length > 5 ? ' und weitere' : ''}. ` +
-      `Unser mobiler Service ist flexibel und kommt zu Ihrem Wunschort – ob zu Hause, am Arbeitsplatz oder an einem anderen vereinbarten Treffpunkt. ` +
-      `So sparen Sie Zeit und müssen Ihr beschädigtes Fahrzeug nicht erst in eine Werkstatt bringen. ` +
-      `Wir bringen alle notwendigen Materialien und Werkzeuge mit und erledigen den Scheibenwechsel direkt vor Ort. ` +
-      `Kontaktieren Sie uns telefonisch oder über unser Online-Formular – wir melden uns schnellstmöglich bei Ihnen zurück.`;
-  } else {
-    serviceArea = `Unser mobiler Scheibenwechsel-Service deckt ganz ${cityName} und alle umliegenden Gebiete ab. ` +
-      `Dabei sind wir flexibel und kommen zu Ihrem Wunschort – ob zu Hause, am Arbeitsplatz oder einem anderen vereinbarten Treffpunkt. ` +
-      `So sparen Sie wertvolle Zeit und müssen Ihr Fahrzeug nicht erst in eine Werkstatt bringen. ` +
-      `Wir bringen alle notwendigen Materialien und das passende Werkzeug mit und erledigen den Scheibenwechsel professionell direkt vor Ort. ` +
-      `Kontaktieren Sie uns telefonisch oder über unser Online-Formular – unser Team meldet sich schnellstmöglich bei Ihnen zurück und vereinbart einen passenden Termin.`;
-  }
-  
-  return {
-    intro,
-    localSection,
-    whyUs,
-    urgencySection,
-    serviceArea
-  };
+  // Use the modular content system - it includes fallbacks for all sections
+  return generateModularContent(location);
 }
 
 /**
  * Generiert einen kompakten "Über den Standort" Text
+ * Uses enrichment data (knownFor, nearbyAutobahn, population) when available.
  */
 export function generateAboutLocation(location: Location): string {
   const hierarchy = getLocationHierarchy(location.slug);
-  const seed = `about-${location.slug}`;
   
-  let text = '';
+  // Enrichment-based content fragments
+  const landmarkText = location.knownFor?.length
+    ? ` Ob in der Nähe von ${location.knownFor.slice(0, 2).join(' oder ')} – unser mobiles Team kommt zu Ihrem Wunschort.`
+    : '';
+  
+  const autobahnText = location.nearbyAutobahn?.length
+    ? ` Die Autobahnen ${location.nearbyAutobahn.slice(0, 3).join(', ')} sorgen für hohes Verkehrsaufkommen und entsprechend häufige Steinschlagschäden in der Region.`
+    : '';
   
   switch (location.type) {
-    case 'bundesland':
-      text = `Als eines der ${location.population && location.population > 5000000 ? 'bevölkerungsreichsten' : 'wichtigen'} Bundesländer Deutschlands ist ${location.name} ein wichtiges Einsatzgebiet für unseren Scheibenwechsel-Service. Wir sind in allen Regionen und Städten für Sie da.`;
-      break;
+    case 'bundesland': {
+      const popText = location.population && location.population > 5_000_000
+        ? `Als eines der bevölkerungsreichsten Bundesländer Deutschlands`
+        : `Als Bundesland`;
+      return `${popText} ist ${location.name} ein wichtiges Einsatzgebiet für unseren mobilen Scheibenwechsel-Service.${autobahnText} Unser Team fährt in alle Regionen und Städte von ${location.name} – direkt zu Ihnen.`;
+    }
     
-    case 'kreisfreie-stadt':
+    case 'kreisfreie-stadt': {
       const bundesland = hierarchy.find(h => h.type === 'bundesland');
-      text = `${location.name}${bundesland ? ` in ${bundesland.name}` : ''} ist mit ${location.population ? `rund ${Math.round(location.population / 1000)} Tausend Einwohnern` : 'seiner Größe'} ein wichtiger Standort für unseren Scheibenwechsel-Service. Unser mobiles Team ist schnell vor Ort – egal ob in der Innenstadt oder in den Außenbezirken.`;
-      break;
+      const popText = location.population
+        ? ` mit rund ${Math.round(location.population / 1000)}.000 Einwohnern`
+        : '';
+      return `${location.name}${bundesland ? ` in ${bundesland.name}` : ''}${popText} gehört zu den Städten, in denen unser mobiles Team regelmäßig Scheibenwechsel durchführt.${autobahnText}${landmarkText} Egal ob Innenstadt oder Außenbezirk – wir kommen direkt zu Ihnen.`;
+    }
     
     case 'stadtbezirk':
     case 'stadtteil': {
       const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-      text = `${location.name} ist ${location.type === 'stadtteil' ? 'ein Stadtteil' : 'ein Bezirk'} von ${parentCity?.name || 'der Stadt'}. ${replacePlaceholders(pickFromPool(synonymPools.localBenefits, seed), { city: location.name })}`;
-      break;
+      const plzText = location.plz?.length ? ` (PLZ ${location.plz.slice(0, 2).join(', ')})` : '';
+      return `${location.name}${plzText} ist ${location.type === 'stadtteil' ? 'ein Stadtteil' : 'ein Bezirk'} von ${parentCity?.name || 'der Stadt'}. Unser mobiles Team kommt direkt zu Ihnen nach ${location.name} – einfach und bequem, ohne Werkstattbesuch.`;
     }
     
     default:
-      text = `${location.name} gehört zu unserem Einsatzgebiet. Unser mobiler Service ist schnell bei Ihnen – für den Scheibenwechsel von Front- und Heckscheibe.`;
+      return `${location.name} gehört zu unserem Einsatzgebiet. Unser mobiles Team kommt direkt zu Ihnen – für den Scheibenwechsel von Front- und Heckscheibe.`;
   }
-  
-  return text;
 }
 
 // Generiert Versicherungstext
@@ -528,10 +462,45 @@ export function generateLocalFaqs(
     const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt');
     if (parentCity) {
       faqs.push({
-        question: `Haben Sie ein Büro in ${location.name}?`,
-        answer: `Wir arbeiten als mobiler Service und haben kein festes Büro in ${location.name}. Dadurch können wir flexibel zu Ihnen kommen – ob nach Hause, zur Arbeit oder an einen anderen Ort in ${parentCity.name}.`
+        question: `Wie funktioniert der mobile Service in ${location.name}?`,
+        answer: `Unser mobiles Team kommt direkt zu Ihnen nach ${location.name} – ob nach Hause, zur Arbeit oder an einen anderen Ort in ${parentCity.name}. Sie sparen sich den Weg in eine Werkstatt und wir erledigen den Scheibenwechsel bequem vor Ort.`
       });
     }
+  }
+  
+  // === ENRICHMENT-BASED FAQs ===
+  
+  // Autobahn FAQ
+  if (location.nearbyAutobahn && location.nearbyAutobahn.length > 0) {
+    const autobahnList = location.nearbyAutobahn.slice(0, 3).join(', ');
+    faqs.push({
+      question: `Wie häufig kommt Steinschlag auf der ${location.nearbyAutobahn[0]} vor?`,
+      answer: `Die ${autobahnList} gehören zu den stark befahrenen Strecken in der Region ${location.name}. Steinschlag durch aufgewirbelten Split ist hier besonders häufig – vor allem in den Wintermonaten, wenn Streugut auf den Fahrbahnen liegt. Bei einem Steinschlag sollten Sie schnell handeln, bevor sich der Schaden vergrößert.`
+    });
+  }
+  
+  // University city FAQ
+  if (location.universityCity) {
+    faqs.push({
+      question: `Gibt es spezielle Angebote für Studierende in ${location.name}?`,
+      answer: `Als Universitätsstadt hat ${location.name} viele junge Autofahrer. Unser Service ist für alle gleich fair: Mit Teilkaskoversicherung zahlen Sie nur die Selbstbeteiligung. Ohne Versicherung erstellen wir Ihnen gerne ein individuelles Angebot. Der mobile Service spart Ihnen in jedem Fall den Weg zur Werkstatt.`
+    });
+  }
+  
+  // High traffic FAQ
+  if (location.localTraffic === 'hoch') {
+    faqs.push({
+      question: `Wie schnell bekommen Sie in ${location.name} einen Termin?`,
+      answer: `Trotz des hohen Verkehrsaufkommens in ${location.name} können wir in der Regel innerhalb von 24-48 Stunden einen Termin anbieten. Der Vorteil unseres mobilen Service: Sie müssen sich nicht durch den Verkehr zu einer Werkstatt kämpfen – wir kommen direkt zu Ihnen.`
+    });
+  }
+  
+  // Industrial hub FAQ
+  if (location.industrialHub) {
+    faqs.push({
+      question: `Bieten Sie Fuhrpark-Service für Unternehmen in ${location.name} an?`,
+      answer: `Ja, als Wirtschaftsstandort hat ${location.name} viele Firmenkunden mit Fuhrparks. Wir bieten Flottenlösungen ab 5 Fahrzeugen mit attraktiven Konditionen, festem Ansprechpartner und flexibler Terminplanung – direkt auf Ihrem Firmenparkplatz.`
+    });
   }
   
   return faqs;

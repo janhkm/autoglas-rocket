@@ -22,7 +22,7 @@ jobs:
         run: npm ci
       
       - name: Run pSEO Quality Validation
-        run: npx ts-node --project tsconfig.scripts.json scripts/validate-pseo-quality.ts
+        run: npx ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/validate-pseo-quality.ts
       
       - name: Generate llms.txt
         run: npx tsx scripts/generate-llms-txt.ts

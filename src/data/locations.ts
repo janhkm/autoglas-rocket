@@ -32,6 +32,13 @@ export interface Location {
   title?: string;              // Custom page title (30-70 chars target)
   metaDescription?: string;    // Custom meta description (100-170 chars target)
   h1?: string;                 // Custom H1 heading (10-80 chars target)
+  // Content enrichment fields (optional - for data-driven content modules)
+  nearbyAutobahn?: string[];       // e.g. ["A9", "A92", "A99"]
+  knownFor?: string[];             // e.g. ["BMW-Werk", "Allianz Arena"] - landmarks for orientation
+  climateZone?: 'nord' | 'mitte' | 'sued' | 'alpin';
+  localTraffic?: 'hoch' | 'mittel' | 'gering';
+  universityCity?: boolean;        // high young-driver demographic
+  industrialHub?: boolean;         // fleet/commercial vehicle demand
 }
 
 export const locations: Location[] = [
@@ -45,7 +52,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 11103043,
     priority: 10,
-    wikidataId: "Q985"
+    wikidataId: "Q985",
+    climateZone: "sued",
+    nearbyAutobahn: ["A5", "A6", "A8", "A81"],
+    knownFor: ["Automobilindustrie", "Schwarzwald", "Bodensee"],
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "bayern",
@@ -54,7 +66,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 13140183,
     priority: 10,
-    wikidataId: "Q980"
+    wikidataId: "Q980",
+    climateZone: "sued",
+    nearbyAutobahn: ["A3", "A6", "A8", "A9", "A92", "A99"],
+    knownFor: ["Alpenregion", "Automobilstandort", "Autobahnkreuz Süddeutschland"],
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "berlin",
@@ -64,7 +81,12 @@ export const locations: Location[] = [
     population: 3664088,
     coordinates: { lat: 52.5200, lng: 13.4050 },
     priority: 10,
-    wikidataId: "Q64"
+    wikidataId: "Q64",
+    climateZone: "nord",
+    nearbyAutobahn: ["A10", "A100", "A111", "A113", "A115"],
+    knownFor: ["Brandenburger Tor", "Berliner Ring A10", "Stadtautobahn"],
+    localTraffic: "hoch",
+    universityCity: true,
   },
   {
     slug: "brandenburg",
@@ -73,7 +95,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 2531071,
     priority: 8,
-    wikidataId: "Q1208"
+    wikidataId: "Q1208",
+    climateZone: "nord",
+    nearbyAutobahn: ["A2", "A9", "A10", "A13", "A15"],
+    knownFor: ["Berliner Umland", "Tesla Gigafactory Grünheide"],
+    localTraffic: "mittel",
   },
   {
     slug: "bremen",
@@ -82,7 +108,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 680130,
     priority: 7,
-    wikidataId: "Q24879"
+    wikidataId: "Q24879",
+    climateZone: "nord",
+    nearbyAutobahn: ["A1", "A27", "A28"],
+    knownFor: ["Hafenstadt", "Mercedes-Werk"],
+    localTraffic: "mittel",
+    industrialHub: true,
   },
   {
     slug: "hamburg",
@@ -92,7 +123,13 @@ export const locations: Location[] = [
     population: 1853935,
     coordinates: { lat: 53.5511, lng: 9.9937 },
     priority: 10,
-    wikidataId: "Q1055"
+    wikidataId: "Q1055",
+    climateZone: "nord",
+    nearbyAutobahn: ["A1", "A7", "A23", "A24", "A25"],
+    knownFor: ["Elbtunnel", "Hafen", "Köhlbrandbrücke"],
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   {
     slug: "hessen",
@@ -101,7 +138,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 6293154,
     priority: 9,
-    wikidataId: "Q1199"
+    wikidataId: "Q1199",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A3", "A5", "A7", "A44", "A45", "A66"],
+    knownFor: ["Frankfurter Kreuz", "Finanzmetropole", "Rhein-Main-Gebiet"],
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "mecklenburg-vorpommern",
@@ -110,7 +152,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 1610774,
     priority: 6,
-    wikidataId: "Q1196"
+    wikidataId: "Q1196",
+    climateZone: "nord",
+    nearbyAutobahn: ["A19", "A20", "A24"],
+    knownFor: ["Ostseeküste", "Seenplatte"],
+    localTraffic: "gering",
   },
   {
     slug: "niedersachsen",
@@ -119,7 +165,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 8003421,
     priority: 9,
-    wikidataId: "Q1197"
+    wikidataId: "Q1197",
+    climateZone: "nord",
+    nearbyAutobahn: ["A1", "A2", "A7", "A27", "A28", "A30", "A31"],
+    knownFor: ["Volkswagen-Werk Wolfsburg", "Nordseeküste", "Hannover Messe"],
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "nordrhein-westfalen",
@@ -128,7 +179,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 17925570,
     priority: 10,
-    wikidataId: "Q1198"
+    wikidataId: "Q1198",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A1", "A2", "A3", "A4", "A40", "A42", "A44", "A46", "A57"],
+    knownFor: ["Dichtestes Autobahnnetz Deutschlands", "Ruhrgebiet", "Rheinland"],
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "rheinland-pfalz",
@@ -137,7 +193,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 4098391,
     priority: 8,
-    wikidataId: "Q1200"
+    wikidataId: "Q1200",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A1", "A3", "A6", "A48", "A61", "A65"],
+    knownFor: ["Weinstraße", "Nürburgring", "Rheintal"],
+    localTraffic: "mittel",
   },
   {
     slug: "saarland",
@@ -146,7 +206,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 983991,
     priority: 6,
-    wikidataId: "Q1201"
+    wikidataId: "Q1201",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A1", "A6", "A8", "A620"],
+    knownFor: ["Grenzregion Frankreich", "Stahlregion"],
+    localTraffic: "mittel",
+    industrialHub: true,
   },
   {
     slug: "sachsen",
@@ -155,7 +220,12 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 4056941,
     priority: 8,
-    wikidataId: "Q1202"
+    wikidataId: "Q1202",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A4", "A9", "A13", "A14", "A72"],
+    knownFor: ["Automobilstandort", "VW-Werk Zwickau", "BMW-Werk Leipzig"],
+    localTraffic: "mittel",
+    industrialHub: true,
   },
   {
     slug: "sachsen-anhalt",
@@ -164,7 +234,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 2180684,
     priority: 7,
-    wikidataId: "Q1206"
+    wikidataId: "Q1206",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A2", "A9", "A14", "A38"],
+    knownFor: ["Harz", "Autobahnkreuz A2/A9"],
+    localTraffic: "mittel",
   },
   {
     slug: "schleswig-holstein",
@@ -173,7 +247,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 2910875,
     priority: 8,
-    wikidataId: "Q1194"
+    wikidataId: "Q1194",
+    climateZone: "nord",
+    nearbyAutobahn: ["A1", "A7", "A21", "A23"],
+    knownFor: ["Nord-Ostsee-Kanal", "Fehmarnbeltquerung"],
+    localTraffic: "mittel",
   },
   {
     slug: "thueringen",
@@ -182,7 +260,11 @@ export const locations: Location[] = [
     parentSlug: null,
     population: 2120237,
     priority: 7,
-    wikidataId: "Q1205"
+    wikidataId: "Q1205",
+    climateZone: "mitte",
+    nearbyAutobahn: ["A4", "A9", "A38", "A71", "A73"],
+    knownFor: ["Thüringer Wald", "Opel-Werk Eisenach"],
+    localTraffic: "mittel",
   },
 
   // =====================================================
@@ -297,7 +379,13 @@ export const locations: Location[] = [
     population: 1488000,
     coordinates: { lat: 48.1351, lng: 11.5820 },
     plz: ["80331", "80333", "80335", "80336", "80469", "80538", "80539", "80634", "80636", "80637"],
-    priority: 10
+    priority: 10,
+    nearbyAutobahn: ["A8", "A9", "A92", "A95", "A96", "A99"],
+    knownFor: ["BMW-Werk", "Allianz Arena", "Marienplatz"],
+    climateZone: "sued",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Köln
@@ -309,7 +397,12 @@ export const locations: Location[] = [
     population: 1084000,
     coordinates: { lat: 50.9375, lng: 6.9603 },
     plz: ["50667", "50668", "50670", "50672", "50674", "50676", "50677", "50678", "50679", "50733"],
-    priority: 10
+    priority: 10,
+    nearbyAutobahn: ["A1", "A3", "A4", "A57", "A59", "A555"],
+    knownFor: ["Kölner Dom", "Autobahnkreuz Köln", "Rheinbrücken"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Frankfurt
@@ -321,7 +414,13 @@ export const locations: Location[] = [
     population: 753000,
     coordinates: { lat: 50.1109, lng: 8.6821 },
     plz: ["60306", "60308", "60310", "60311", "60313", "60314", "60316", "60318", "60320", "60322"],
-    priority: 10
+    priority: 10,
+    nearbyAutobahn: ["A3", "A5", "A66", "A661"],
+    knownFor: ["Frankfurter Kreuz", "Bankenviertel", "Messegelände"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Stuttgart
@@ -333,7 +432,13 @@ export const locations: Location[] = [
     population: 635000,
     coordinates: { lat: 48.7758, lng: 9.1829 },
     plz: ["70173", "70174", "70176", "70178", "70180", "70182", "70184", "70186", "70188", "70190"],
-    priority: 10
+    priority: 10,
+    nearbyAutobahn: ["A8", "A81", "A831"],
+    knownFor: ["Mercedes-Benz-Museum", "Porsche-Werk", "Automobilstandort"],
+    climateZone: "sued",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Düsseldorf
@@ -345,7 +450,12 @@ export const locations: Location[] = [
     population: 620000,
     coordinates: { lat: 51.2277, lng: 6.7735 },
     plz: ["40210", "40211", "40212", "40213", "40215", "40217", "40219", "40221", "40223", "40225"],
-    priority: 10
+    priority: 10,
+    nearbyAutobahn: ["A3", "A44", "A46", "A52", "A57", "A59"],
+    knownFor: ["Rheinufer", "Messestadt", "Medienhafen"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Leipzig
@@ -357,7 +467,13 @@ export const locations: Location[] = [
     population: 597000,
     coordinates: { lat: 51.3397, lng: 12.3731 },
     plz: ["04103", "04105", "04107", "04109", "04129", "04155", "04157", "04158", "04159", "04177"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A9", "A14", "A38"],
+    knownFor: ["BMW-Werk", "Porsche-Werk", "Messe"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Dortmund
@@ -369,7 +485,13 @@ export const locations: Location[] = [
     population: 588000,
     coordinates: { lat: 51.5136, lng: 7.4653 },
     plz: ["44135", "44137", "44139", "44141", "44143", "44145", "44147", "44149", "44225", "44227"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A1", "A2", "A40", "A44", "A45"],
+    knownFor: ["Westfalenhallen", "Signal Iduna Park", "Ruhrgebiet"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Essen
@@ -381,7 +503,12 @@ export const locations: Location[] = [
     population: 583000,
     coordinates: { lat: 51.4556, lng: 7.0116 },
     plz: ["45127", "45128", "45130", "45131", "45133", "45134", "45136", "45138", "45139", "45141"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A40", "A42", "A52"],
+    knownFor: ["Messe Essen", "Ruhrgebiet", "Gruga"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Bremen (Stadt)
@@ -393,7 +520,13 @@ export const locations: Location[] = [
     population: 567000,
     coordinates: { lat: 53.0793, lng: 8.8017 },
     plz: ["28195", "28197", "28199", "28201", "28203", "28205", "28207", "28209", "28211", "28213"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A1", "A27", "A28", "A281"],
+    knownFor: ["Mercedes-Benz-Werk", "Überseestadt", "Weser"],
+    climateZone: "nord",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Dresden
@@ -405,7 +538,13 @@ export const locations: Location[] = [
     population: 556000,
     coordinates: { lat: 51.0504, lng: 13.7373 },
     plz: ["01067", "01069", "01097", "01099", "01109", "01127", "01129", "01139", "01157", "01159"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A4", "A13", "A17"],
+    knownFor: ["VW Gläserne Manufaktur", "Frauenkirche", "Elbtal"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Hannover
@@ -417,7 +556,13 @@ export const locations: Location[] = [
     population: 536000,
     coordinates: { lat: 52.3759, lng: 9.7320 },
     plz: ["30159", "30161", "30163", "30165", "30167", "30169", "30171", "30173", "30175", "30177"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A2", "A7", "A37", "A352"],
+    knownFor: ["Autobahnkreuz Hannover-Ost", "Messegelände", "VW Nutzfahrzeuge"],
+    climateZone: "nord",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Nürnberg
@@ -429,7 +574,12 @@ export const locations: Location[] = [
     population: 518000,
     coordinates: { lat: 49.4521, lng: 11.0767 },
     plz: ["90402", "90403", "90408", "90409", "90411", "90419", "90425", "90427", "90429", "90431"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A3", "A6", "A9", "A73"],
+    knownFor: ["Autobahnkreuz Nürnberg", "Messe", "Altstadt"],
+    climateZone: "sued",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Duisburg
@@ -441,7 +591,12 @@ export const locations: Location[] = [
     population: 498000,
     coordinates: { lat: 51.4344, lng: 6.7623 },
     plz: ["47051", "47053", "47055", "47057", "47058", "47059", "47119", "47137", "47139", "47166"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A2", "A3", "A40", "A42", "A59"],
+    knownFor: ["Europas größter Binnenhafen", "Ruhrgebiet"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   
   // Bochum
@@ -453,7 +608,12 @@ export const locations: Location[] = [
     population: 365000,
     coordinates: { lat: 51.4818, lng: 7.2162 },
     plz: ["44787", "44789", "44791", "44793", "44795", "44797", "44799", "44801", "44803", "44805"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A40", "A43", "A44", "A448"],
+    knownFor: ["Opel-Werk (historisch)", "Ruhr-Universität", "Ruhrgebiet"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Wuppertal
@@ -465,7 +625,12 @@ export const locations: Location[] = [
     population: 355000,
     coordinates: { lat: 51.2562, lng: 7.1508 },
     plz: ["42103", "42105", "42107", "42109", "42111", "42113", "42115", "42117", "42119", "42275"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A1", "A46"],
+    knownFor: ["Schwebebahn", "Bergisches Land"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   
   // Bielefeld
@@ -477,7 +642,13 @@ export const locations: Location[] = [
     population: 334000,
     coordinates: { lat: 52.0302, lng: 8.5325 },
     plz: ["33602", "33604", "33605", "33607", "33609", "33611", "33613", "33615", "33617", "33619"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A2", "A33"],
+    knownFor: ["Teutoburger Wald", "Ostwestfalen"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Bonn
@@ -489,7 +660,12 @@ export const locations: Location[] = [
     population: 330000,
     coordinates: { lat: 50.7374, lng: 7.0982 },
     plz: ["53111", "53113", "53115", "53117", "53119", "53121", "53123", "53125", "53127", "53129"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A555", "A562", "A565", "A59"],
+    knownFor: ["Bundesstadt", "UN-Campus", "Rheinufer"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   
   // Münster
@@ -501,7 +677,12 @@ export const locations: Location[] = [
     population: 315000,
     coordinates: { lat: 51.9607, lng: 7.6261 },
     plz: ["48143", "48145", "48147", "48149", "48151", "48153", "48155", "48157", "48159", "48161"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A1", "A43"],
+    knownFor: ["Fahrradstadt", "Altstadt", "Universität"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   
   // Mannheim
@@ -513,7 +694,13 @@ export const locations: Location[] = [
     population: 310000,
     coordinates: { lat: 49.4875, lng: 8.4660 },
     plz: ["68159", "68161", "68163", "68165", "68167", "68169", "68199", "68219", "68229", "68239"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A5", "A6", "A656", "A659"],
+    knownFor: ["Autobahnkreuz Mannheim", "Rhein-Neckar-Gebiet", "Hafen"],
+    climateZone: "sued",
+    localTraffic: "hoch",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Karlsruhe
@@ -525,7 +712,12 @@ export const locations: Location[] = [
     population: 308000,
     coordinates: { lat: 49.0069, lng: 8.4037 },
     plz: ["76131", "76133", "76135", "76137", "76139", "76149", "76185", "76187", "76189", "76199"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A5", "A8", "A65"],
+    knownFor: ["Autobahndreieck Karlsruhe", "KIT", "Fächerstadt"],
+    climateZone: "sued",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   
   // Augsburg
@@ -537,7 +729,13 @@ export const locations: Location[] = [
     population: 296000,
     coordinates: { lat: 48.3705, lng: 10.8978 },
     plz: ["86150", "86152", "86153", "86154", "86156", "86157", "86159", "86161", "86163", "86165"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A8", "A96"],
+    knownFor: ["Fuggerstadt", "Automobilzulieferer"],
+    climateZone: "sued",
+    localTraffic: "mittel",
+    universityCity: true,
+    industrialHub: true,
   },
   
   // Wiesbaden
@@ -549,7 +747,11 @@ export const locations: Location[] = [
     population: 278000,
     coordinates: { lat: 50.0782, lng: 8.2398 },
     plz: ["65183", "65185", "65187", "65189", "65191", "65193", "65195", "65197", "65199", "65201"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A3", "A66", "A643"],
+    knownFor: ["Landeshauptstadt Hessen", "Kurstadt", "Rhein-Main"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
   },
   
   // Aachen
@@ -561,7 +763,12 @@ export const locations: Location[] = [
     population: 249000,
     coordinates: { lat: 50.7753, lng: 6.0839 },
     plz: ["52062", "52064", "52066", "52068", "52070", "52072", "52074", "52076", "52078", "52080"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A4", "A44", "A544"],
+    knownFor: ["Dreiländereck", "RWTH Aachen", "Grenzstadt"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
 
   // =====================================================
@@ -1589,7 +1796,12 @@ export const locations: Location[] = [
     population: 183000,
     coordinates: { lat: 52.3906, lng: 13.0645 },
     plz: ["14467", "14469", "14471", "14473", "14476", "14478", "14480", "14482"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A10", "A115"],
+    knownFor: ["Schloss Sanssouci", "Filmstudio Babelsberg"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "cottbus",
@@ -1651,7 +1863,12 @@ export const locations: Location[] = [
     population: 209000,
     coordinates: { lat: 54.0924, lng: 12.0991 },
     plz: ["18055", "18057", "18059", "18069", "18106", "18107", "18109", "18119"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A19", "A20"],
+    knownFor: ["Ostseehafen", "Warnemünde"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "schwerin",
@@ -1733,7 +1950,12 @@ export const locations: Location[] = [
     population: 218000,
     coordinates: { lat: 49.9929, lng: 8.2473 },
     plz: ["55116", "55118", "55120", "55122", "55124", "55126", "55127", "55128", "55129", "55130", "55131"],
-    priority: 9
+    priority: 9,
+    nearbyAutobahn: ["A60", "A63", "A643"],
+    knownFor: ["Landeshauptstadt", "Rheinufer", "ZDF-Zentrale"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    universityCity: true,
   },
   {
     slug: "ludwigshafen",
@@ -1743,7 +1965,12 @@ export const locations: Location[] = [
     population: 172000,
     coordinates: { lat: 49.4774, lng: 8.4452 },
     plz: ["67059", "67061", "67063", "67065", "67067", "67069", "67071"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A6", "A61", "A650"],
+    knownFor: ["BASF-Werk", "Rhein-Neckar-Gebiet"],
+    climateZone: "mitte",
+    localTraffic: "hoch",
+    industrialHub: true,
   },
   {
     slug: "koblenz",
@@ -1753,7 +1980,11 @@ export const locations: Location[] = [
     population: 114000,
     coordinates: { lat: 50.3569, lng: 7.5890 },
     plz: ["56068", "56070", "56072", "56073", "56075", "56076", "56077"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A48", "A61"],
+    knownFor: ["Deutsches Eck", "Mosel-Rhein-Zusammenfluss"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
   },
   {
     slug: "trier",
@@ -1835,7 +2066,12 @@ export const locations: Location[] = [
     population: 180000,
     coordinates: { lat: 49.2354, lng: 6.9958 },
     plz: ["66111", "66113", "66115", "66117", "66119", "66121", "66123", "66125", "66126", "66127", "66128", "66129"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A1", "A6", "A620"],
+    knownFor: ["Landeshauptstadt Saarland", "Grenzregion Frankreich"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "neunkirchen-saar",
@@ -1927,7 +2163,12 @@ export const locations: Location[] = [
     population: 238000,
     coordinates: { lat: 52.1205, lng: 11.6276 },
     plz: ["39104", "39106", "39108", "39110", "39112", "39114", "39116", "39118", "39120", "39122", "39124", "39126"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A2", "A14"],
+    knownFor: ["Landeshauptstadt", "Autobahnkreuz A2/A14", "Elbe"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "halle-saale",
@@ -1937,7 +2178,13 @@ export const locations: Location[] = [
     population: 239000,
     coordinates: { lat: 51.4828, lng: 11.9700 },
     plz: ["06108", "06110", "06112", "06114", "06116", "06118", "06120", "06122", "06124", "06126", "06128", "06130"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A9", "A14", "A38"],
+    knownFor: ["Autobahnkreuz Halle", "Chemiestandort"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
+    industrialHub: true,
   },
   {
     slug: "dessau-rosslau",
@@ -2007,7 +2254,12 @@ export const locations: Location[] = [
     population: 247000,
     coordinates: { lat: 54.3233, lng: 10.1228 },
     plz: ["24103", "24105", "24106", "24107", "24109", "24111", "24113", "24114", "24116", "24118", "24143", "24145", "24146", "24147", "24148", "24149"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A210", "A215"],
+    knownFor: ["Landeshauptstadt", "Kieler Förde", "Marinestützpunkt"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "luebeck",
@@ -2017,7 +2269,12 @@ export const locations: Location[] = [
     population: 217000,
     coordinates: { lat: 53.8655, lng: 10.6866 },
     plz: ["23552", "23554", "23556", "23558", "23560", "23562", "23564", "23566", "23568", "23569", "23570"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A1", "A20", "A226"],
+    knownFor: ["Holstentor", "Hansestadt", "Altstadt"],
+    climateZone: "nord",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "flensburg",
@@ -2087,7 +2344,12 @@ export const locations: Location[] = [
     population: 214000,
     coordinates: { lat: 50.9787, lng: 11.0328 },
     plz: ["99084", "99085", "99086", "99087", "99089", "99091", "99092", "99094", "99096", "99097", "99098", "99099"],
-    priority: 8
+    priority: 8,
+    nearbyAutobahn: ["A4", "A71"],
+    knownFor: ["Landeshauptstadt Thüringen", "Erfurter Dom", "Krämerbrücke"],
+    climateZone: "mitte",
+    localTraffic: "mittel",
+    universityCity: true,
   },
   {
     slug: "jena",

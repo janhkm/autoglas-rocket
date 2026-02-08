@@ -27,8 +27,8 @@ const THRESHOLDS = {
   // Content
   WORD_COUNT_MIN: 300,
   WORD_COUNT_CRITICAL: 150,
-  CONTENT_SIMILARITY_WARNING: 0.6,
-  CONTENT_SIMILARITY_CRITICAL: 0.8,
+  CONTENT_SIMILARITY_WARNING: 0.8,
+  CONTENT_SIMILARITY_CRITICAL: 0.95,
   
   // Metadata
   TITLE_MIN: 30,
@@ -85,10 +85,17 @@ function checkDuplicateTitles(): void {
       case 'kreisfreie-stadt':
         title = `Autoglas ${loc.name}`;
         break;
-      case 'stadtbezirk':
+      case 'stadtbezirk': {
+        const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt') 
+          || hierarchy.find(h => h.type === 'bundesland');
+        title = `Autoglas ${loc.name}${parentCity ? ` ${parentCity.name}` : ''}`;
+        break;
+      }
       case 'stadtteil': {
-        const parent = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-        title = `Autoglas ${loc.name}${parent ? ` (${parent.name})` : ''}`;
+        const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt')
+          || hierarchy.find(h => h.type === 'stadtbezirk')
+          || hierarchy.find(h => h.type === 'bundesland');
+        title = `Autoglas-Service ${loc.name}${parentCity ? ` ${parentCity.name}` : ''}`;
         break;
       }
       default:
@@ -472,12 +479,15 @@ function generateTitle(location: Location): string {
     case 'kreisfreie-stadt':
       return `Autoglas ${location.name} ᐅ Mobiler Service & Reparatur ${currentYear} ✓ 0€*`;
     case 'stadtbezirk': {
-      const parent = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-      return `Autoglas ${location.name}${parent ? ` (${parent.name})` : ''} » Mobiler Vor-Ort-Service`;
+      const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt') 
+        || hierarchy.find(h => h.type === 'bundesland');
+      return `Autoglas ${location.name}${parentCity ? ` ${parentCity.name}` : ''} » Mobiler Vor-Ort-Service`;
     }
     case 'stadtteil': {
-      const parent = hierarchy.find(h => h.type === 'kreisfreie-stadt' || h.type === 'bundesland');
-      return `Autoglas-Service ${location.name}${parent ? ` ${parent.name}` : ''} ᐅ Schnell & Mobil`;
+      const parentCity = hierarchy.find(h => h.type === 'kreisfreie-stadt')
+        || hierarchy.find(h => h.type === 'stadtbezirk')
+        || hierarchy.find(h => h.type === 'bundesland');
+      return `Autoglas-Service ${location.name}${parentCity ? ` ${parentCity.name}` : ''} ᐅ Schnell & Mobil`;
     }
     default:
       return `Autoglas ${location.name} – Mobiler Glasservice | Autoglas-Rocket`;
@@ -626,6 +636,57 @@ function checkBoilerplateRatio(): void {
 }
 
 // ============================================================================
+// 11. ENRICHMENT COVERAGE CHECK
+// ============================================================================
+
+function checkEnrichmentCoverage(): void {
+  console.log('\n🔍 Checking enrichment data coverage...');
+  
+  const importantLocations = locations.filter(l => 
+    l.type === 'bundesland' || 
+    (l.type === 'kreisfreie-stadt' && (l.priority || 0) >= 8)
+  );
+  
+  let withAutobahn = 0;
+  let withKnownFor = 0;
+  let withClimate = 0;
+  let withTraffic = 0;
+  let fullyEnriched = 0;
+  
+  for (const loc of importantLocations) {
+    const hasAutobahn = !!(loc as any).nearbyAutobahn?.length;
+    const hasKnownFor = !!(loc as any).knownFor?.length;
+    const hasClimate = !!(loc as any).climateZone;
+    const hasTraffic = !!(loc as any).localTraffic;
+    
+    if (hasAutobahn) withAutobahn++;
+    if (hasKnownFor) withKnownFor++;
+    if (hasClimate) withClimate++;
+    if (hasTraffic) withTraffic++;
+    if (hasAutobahn && hasKnownFor && hasClimate && hasTraffic) fullyEnriched++;
+  }
+  
+  const total = importantLocations.length;
+  console.log(`   Important locations (Bundesland + priority>=8 cities): ${total}`);
+  console.log(`   With nearbyAutobahn: ${withAutobahn}/${total} (${(withAutobahn/total*100).toFixed(0)}%)`);
+  console.log(`   With knownFor: ${withKnownFor}/${total} (${(withKnownFor/total*100).toFixed(0)}%)`);
+  console.log(`   With climateZone: ${withClimate}/${total} (${(withClimate/total*100).toFixed(0)}%)`);
+  console.log(`   With localTraffic: ${withTraffic}/${total} (${(withTraffic/total*100).toFixed(0)}%)`);
+  console.log(`   Fully enriched: ${fullyEnriched}/${total} (${(fullyEnriched/total*100).toFixed(0)}%)`);
+  
+  const unenriched = importantLocations.filter(l => {
+    const a = l as any;
+    return !a.nearbyAutobahn?.length && !a.knownFor?.length && !a.climateZone;
+  });
+  
+  if (unenriched.length > 0) {
+    addIssue('warning', 'enrichment-coverage',
+      `${unenriched.length} important locations lack enrichment data: ${unenriched.slice(0, 5).map(l => l.name).join(', ')}${unenriched.length > 5 ? '...' : ''}`
+    );
+  }
+}
+
+// ============================================================================
 // MAIN EXECUTION
 // ============================================================================
 
@@ -690,6 +751,9 @@ async function main() {
   checkContentSimilarity();
   checkMetadataLength();
   checkBoilerplateRatio();
+  
+  // Phase 4: Enrichment coverage
+  checkEnrichmentCoverage();
   
   // Print summary
   printSummary();

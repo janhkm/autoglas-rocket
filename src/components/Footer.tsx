@@ -8,7 +8,7 @@ export default function Footer() {
     <footer className="bg-slate-900 text-white">
       {/* Main Footer */}
       <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 lg:gap-12">
           {/* Company Info */}
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
@@ -85,6 +85,22 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
+          </div>
+
+          {/* Marken */}
+          <div className="lg:col-span-2 md:col-span-1">
+            <h4 className="font-semibold text-lg mb-4">Marken</h4>
+            <div className="flex flex-wrap gap-2">
+              {footerLinks.brandHubs.map((link, index) => (
+                <Link 
+                  key={index}
+                  href={link.href}
+                  className="text-slate-400 hover:text-orange-400 transition-colors text-sm"
+                >
+                  {link.text}
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
 
