@@ -1,8 +1,13 @@
 /** @type {import('next-sitemap').IConfig} */
+// HINWEIS: Diese Config wird NICHT aktiv genutzt.
+// Sitemaps werden von scripts/generate-sitemaps.ts generiert (npm run sitemap / postbuild).
+// robots.txt wird manuell in public/robots.txt gepflegt.
+// generateRobotsTxt und generateIndexSitemap sind deaktiviert,
+// damit ein versehentliches `npx next-sitemap` nichts überschreibt.
 module.exports = {
   siteUrl: process.env.SITE_URL || 'https://autoglas-rocket.de',
-  generateRobotsTxt: true,
-  generateIndexSitemap: true,
+  generateRobotsTxt: false,
+  generateIndexSitemap: false,
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,
@@ -13,15 +18,4 @@ module.exports = {
     '/404',
     '/500',
   ],
-  robotsTxtOptions: {
-    policies: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/termin-anfragen', '/_next/'],
-      },
-    ],
-  },
-  // Die dynamischen Routen werden automatisch von Next.js generateStaticParams erfasst
-  // Für erweiterte Sitemap-Generierung: npm run seo:sitemap
 };

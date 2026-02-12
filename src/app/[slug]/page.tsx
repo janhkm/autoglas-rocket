@@ -27,6 +27,10 @@ import BrandPage from './BrandPage';
 // This allows incremental updates without full rebuilds
 export const revalidate = 86400; // 24 hours in seconds
 
+// Allow dynamic params so ISR can generate pages on-demand
+// Without this, slugs not in generateStaticParams() return 404
+export const dynamicParams = true;
+
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -99,6 +103,8 @@ function parseSlug(slug: string): ParsedSlug {
 }
 
 // Generate all static params
+// SYNC: Filter hier MÜSSEN identisch sein mit scripts/generate-sitemaps.ts
+// Jede Änderung hier muss auch dort angepasst werden (und umgekehrt)!
 export async function generateStaticParams() {
   const params: { slug: string }[] = [];
 
@@ -108,6 +114,7 @@ export async function generateStaticParams() {
   }
 
   // T2: Service-Location combinations (nur für wichtige Standorte)
+  // SYNC: Identischer Filter in scripts/generate-sitemaps.ts → isImportantLocationForServices()
   const importantLocations = locations.filter(loc => 
     loc.type === 'kreisfreie-stadt' || 
     loc.type === 'bundesland' ||
@@ -181,28 +188,6 @@ function hashString(str: string): number {
   return Math.abs(hash);
 }
 
-// Helper: Determines if a location should be noindexed (weak content)
-// Noindex criteria:
-// - Stadtteil or Stadtbezirk without PLZ
-// - Low priority (< 3)
-// - No coordinates
-function shouldNoindexLocation(location: ReturnType<typeof getLocationBySlug>): boolean {
-  if (!location) return false;
-  
-  // Only consider Stadtteile and Stadtbezirke for noindex
-  if (location.type !== 'stadtteil' && location.type !== 'stadtbezirk') {
-    return false;
-  }
-  
-  const hasNoPlz = !location.plz || location.plz.length === 0;
-  const lowPriority = !location.priority || location.priority < 3;
-  const noCoords = !location.coordinates;
-  
-  // Noindex if all three conditions are met (very weak page)
-  // This is conservative - we only noindex truly thin pages
-  return hasNoPlz && lowPriority && noCoords;
-}
-
 // Helper: Generate optimized meta description with unique variants for Stadtteile
 // Uses location.metaDescription override if set
 function generateLocationDescription(
@@ -268,19 +253,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       const title = generateLocationTitle(location, hierarchy);
       const description = generateLocationDescription(location, hierarchy);
       const canonicalUrl = `https://autoglas-rocket.de/${slug}/`;
-      const noindex = shouldNoindexLocation(location);
       
       return {
         title,
         description,
         alternates: { canonical: canonicalUrl },
-        // Noindex weak Stadtteil pages to focus crawl budget on quality pages
-        ...(noindex && {
-          robots: {
-            index: false,
-            follow: true, // Still follow links for link equity
-          },
-        }),
         openGraph: {
           title,
           description,

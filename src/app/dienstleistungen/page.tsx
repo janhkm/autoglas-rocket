@@ -123,7 +123,7 @@ export default function DienstleistungenPage() {
             
             <div className="grid md:grid-cols-3 gap-8">
               {allGlassServices.map((service) => (
-                <div key={service.slug} className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={service.slug} id={service.slug} className="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow scroll-mt-24">
                   <div className="text-4xl mb-4">{service.icon}</div>
                   <h3 className="text-xl font-semibold mb-2">{service.name}</h3>
                   <p className="text-gray-600 mb-4">{service.description}</p>

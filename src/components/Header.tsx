@@ -26,8 +26,8 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
-            <Link href="/scheibenwechsel-berlin" className="text-slate-600 hover:text-orange-500 font-medium transition-colors">
-              Scheibenwechsel
+            <Link href="/dienstleistungen" className="text-slate-600 hover:text-orange-500 font-medium transition-colors">
+              Leistungen
             </Link>
             <Link href="/einsatzgebiete" className="text-slate-600 hover:text-orange-500 font-medium transition-colors">
               Einsatzgebiete
@@ -65,11 +65,11 @@ export default function Header() {
           <div className="md:hidden py-4 border-t border-slate-100">
             <nav className="flex flex-col gap-4">
               <Link 
-                href="/scheibenwechsel-berlin" 
+                href="/dienstleistungen" 
                 className="text-slate-600 hover:text-orange-500 font-medium py-2"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Scheibenwechsel
+                Leistungen
               </Link>
               <Link 
                 href="/einsatzgebiete" 

@@ -2,18 +2,38 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://autoglas-rocket.de/sitemap-pages.xml</loc>
-    <lastmod>2026-02-08T21:56:39.721Z</lastmod>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://autoglas-rocket.de/sitemap-cities.xml</loc>
-    <lastmod>2026-02-08T21:56:39.721Z</lastmod>
+    <loc>https://autoglas-rocket.de/sitemap-bundeslaender.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
   </sitemap>
   <sitemap>
-    <loc>https://autoglas-rocket.de/sitemap-services.xml</loc>
-    <lastmod>2026-02-08T21:56:39.721Z</lastmod>
+    <loc>https://autoglas-rocket.de/sitemap-staedte.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://autoglas-rocket.de/sitemap-regionen.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://autoglas-rocket.de/sitemap-stadtteile.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://autoglas-rocket.de/sitemap-scheibenwechsel.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://autoglas-rocket.de/sitemap-frontscheibe-wechseln.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://autoglas-rocket.de/sitemap-heckscheibe-wechseln.xml</loc>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://autoglas-rocket.de/sitemap-vehicles.xml</loc>
-    <lastmod>2026-02-08T21:56:39.721Z</lastmod>
+    <lastmod>2026-02-12T17:40:35.905Z</lastmod>
   </sitemap>
 </sitemapindex>

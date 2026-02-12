@@ -361,11 +361,18 @@ export function getFooterLinks(): {
   brandHubs: InternalLink[];
 } {
   return {
-    services: mainServices.map(service => ({
-      href: `/${service.slug}-berlin/`,
-      text: service.name,
-      title: service.description
-    })),
+    services: [
+      {
+        href: '/dienstleistungen/',
+        text: 'Alle Leistungen',
+        title: 'Übersicht aller Autoglas-Dienstleistungen'
+      },
+      ...mainServices.map(service => ({
+        href: `/dienstleistungen/#${service.slug}`,
+        text: service.name,
+        title: service.description
+      })),
+    ],
     topCities: getTopCityLinks(8),
     bundeslaender: getBundeslandLinks().slice(0, 8),
     vehicles: getPopularVehicleLinks(8),

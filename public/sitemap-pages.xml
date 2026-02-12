@@ -2,14 +2,17 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://autoglas-rocket.de/</loc>
-    <lastmod>2026-02-08T21:56:39.723Z</lastmod>
-    <changefreq>daily</changefreq>
+    <lastmod>2026-02-12T17:40:35.906Z</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://autoglas-rocket.de/dienstleistungen/</loc>
+    <lastmod>2026-02-12T17:40:35.906Z</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
     <loc>https://autoglas-rocket.de/einsatzgebiete/</loc>
-    <lastmod>2026-02-08T21:56:39.723Z</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <lastmod>2026-02-12T17:40:35.906Z</lastmod>
+    <priority>0.9</priority>
   </url>
 </urlset>
